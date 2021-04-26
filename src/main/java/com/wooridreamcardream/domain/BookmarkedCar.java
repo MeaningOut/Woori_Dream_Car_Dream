@@ -1,7 +1,9 @@
 package com.wooridreamcardream.domain;
 
+import lombok.Getter;
 import javax.persistence.*;
 
+@Getter
 @Entity
 @Table(name="bookmarked_cars")
 public class BookmarkedCar {

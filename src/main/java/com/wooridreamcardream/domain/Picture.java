@@ -1,7 +1,10 @@
 package com.wooridreamcardream.domain;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 
+@Getter
 @Entity
 @Table(name="pictures")
 public class Picture {

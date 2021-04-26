@@ -1,9 +1,12 @@
 package com.wooridreamcardream.domain;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Getter
 @Entity
 @Table(name="categories")
 public class Category {

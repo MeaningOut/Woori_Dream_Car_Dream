@@ -1,4 +1,4 @@
-package com.wooridreamcardream.domain;
+package com.wooridreamcardream.meaningout.domain;
 
 import lombok.Getter;
 
@@ -18,4 +18,9 @@ public class UserTaste {
 
     @Column(name = "cc")
     private String cc;
+
+    public UserTaste update(String cc) {
+        this.cc = cc;
+        return this;
+    }
 }

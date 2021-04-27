@@ -1,11 +1,15 @@
-package com.wooridreamcardream.domain;
+package com.wooridreamcardream.meaningout.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@NoArgsConstructor
 @Getter
 @Entity
 @Table(name="cars")
@@ -22,10 +26,10 @@ public class Car {
     private String name;
 
     @Column(name="min_price", nullable=false)
-    private Integer minPrice;
+    private BigDecimal minPrice;
 
     @Column(name="max_price", nullable=false)
-    private Integer maxPrice;
+    private BigDecimal maxPrice;
 
     @Column(name="company", nullable=false)
     private String company;
@@ -60,9 +64,10 @@ public class Car {
     @Column(name="gear_shift")
     private String gearShift;
 
-    @Column(name="image_url", nullable=false)
+    @Column(name="image_url", nullable = true)
     private String imageUrl;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "car")
     private Collection<BookmarkedCar> bookmarkedCarList = new ArrayList<BookmarkedCar>();
 }

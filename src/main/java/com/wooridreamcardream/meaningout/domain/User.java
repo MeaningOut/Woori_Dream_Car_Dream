@@ -1,11 +1,13 @@
-package com.wooridreamcardream.domain;
+package com.wooridreamcardream.meaningout.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.ArrayList;
 
+@NoArgsConstructor
 @Getter
 @Entity
 @Table(name="users")

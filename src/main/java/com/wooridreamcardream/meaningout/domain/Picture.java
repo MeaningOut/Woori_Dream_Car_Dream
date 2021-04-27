@@ -1,9 +1,11 @@
-package com.wooridreamcardream.domain;
+package com.wooridreamcardream.meaningout.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@NoArgsConstructor
 @Getter
 @Entity
 @Table(name="pictures")

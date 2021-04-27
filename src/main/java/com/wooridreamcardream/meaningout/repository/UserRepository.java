@@ -1,6 +1,6 @@
-package com.wooridreamcardream.repository;
+package com.wooridreamcardream.meaningout.repository;
 
-import com.wooridreamcardream.domain.User;
+import com.wooridreamcardream.meaningout.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

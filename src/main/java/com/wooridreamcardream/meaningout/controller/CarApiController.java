@@ -31,9 +31,4 @@ public class CarApiController {
     public List<CarResponseDto> findByMinPriceAndMaxPrice(@RequestParam("minPrice") BigDecimal minPrice, @RequestParam("maxPrice") BigDecimal maxPrice) {
         return carService.findByMinPriceAndMaxPrice(minPrice, maxPrice);
     }
-
-    @GetMapping("/api/v1/car/dream")
-    public List<CarResponseDto> dream(@RequestParam("cc") String cc) {
-        return carService.dream(cc);
-    }
 }

@@ -1,12 +1,10 @@
 package com.wooridreamcardream.meaningout.controller;
 
 import com.wooridreamcardream.meaningout.dto.CarResponseDto;
+import com.wooridreamcardream.meaningout.dto.CarSaveRequestDto;
 import com.wooridreamcardream.meaningout.service.CarService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,5 +28,10 @@ public class CarApiController {
     @GetMapping("/api/v1/car/price")
     public List<CarResponseDto> findByMinPriceAndMaxPrice(@RequestParam("minPrice") BigDecimal minPrice, @RequestParam("maxPrice") BigDecimal maxPrice) {
         return carService.findByMinPriceAndMaxPrice(minPrice, maxPrice);
+    }
+
+    @PostMapping("/api/v1/car")
+    public Long save(@RequestBody CarSaveRequestDto requestDto) {
+        return carService.save(requestDto);
     }
 }

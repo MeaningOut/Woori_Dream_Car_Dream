@@ -1,6 +1,7 @@
 package com.wooridreamcardream.meaningout.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -70,4 +71,31 @@ public class Car {
     @JsonIgnore
     @OneToMany(mappedBy = "car")
     private Collection<BookmarkedCar> bookmarkedCarList = new ArrayList<BookmarkedCar>();
+
+    @Builder
+    public Car(Category category, String name,
+               BigDecimal minPrice, BigDecimal maxPrice,
+               String company, String origin,
+               String carType, String engine,
+               String charger, String emission,
+               String fuel, String fuelEfficiency,
+               String occupancy, String driveType,
+               String gearShift, String imageUrl) {
+        this.category = category;
+        this.name = name;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
+        this.company = company;
+        this.origin = origin;
+        this.carType = carType;
+        this.engine = engine;
+        this.charger = charger;
+        this.emission = emission;
+        this.fuel = fuel;
+        this.fuelEfficiency = fuelEfficiency;
+        this.occupancy = occupancy;
+        this.driveType = driveType;
+        this.gearShift = gearShift;
+        this.imageUrl = imageUrl;
+    }
 }

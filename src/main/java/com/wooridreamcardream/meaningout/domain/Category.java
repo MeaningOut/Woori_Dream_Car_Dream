@@ -1,6 +1,7 @@
 package com.wooridreamcardream.meaningout.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.junit.Ignore;
@@ -18,7 +19,7 @@ public class Category {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name= "category_name", nullable=false)
+    @Column(name= "category_name", nullable=false, unique=true)
     private String categoryName;
 
     @JsonIgnore
@@ -28,4 +29,9 @@ public class Category {
     @JsonIgnore
     @OneToMany(mappedBy = "category")
     private Collection<Picture> pictureList = new ArrayList<Picture>();
+
+    @Builder
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
+    }
 }

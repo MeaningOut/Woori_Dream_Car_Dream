@@ -34,4 +34,13 @@ public class CarApiController {
     public Long save(@RequestBody CarSaveRequestDto requestDto) {
         return carService.save(requestDto);
     }
+
+    // http://localhost:5000/refined-cars?people=5&body-type=소형&environmental-protection=Y&fuel-economy=Y&boycott-in-japan=Y&patriotic-campaign=Y&vegan=N
+    @GetMapping("/api/v1/car/dream")
+    public void dream(@RequestParam("user-income") BigDecimal user_income, @RequestParam("people") int people, @RequestParam("body-type") String body_type,
+                                      @RequestParam("environmental-protection") String environmental_protection,
+                                      @RequestParam("fuel-economy") String fuel_economy, @RequestParam("boycott-in-japan") String boycott_in_japan,
+                                      @RequestParam("patriotic-campaign") String patriotic_campaign, @RequestParam("vegan") String vegan) {
+        carService.dream(user_income, people, body_type, environmental_protection, fuel_economy, boycott_in_japan, patriotic_campaign, vegan);
+    }
 }

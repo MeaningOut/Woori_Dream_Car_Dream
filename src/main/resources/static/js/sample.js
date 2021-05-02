@@ -74,18 +74,16 @@ $('#div-person-plus').click(function() {
 });
 
 // 외형
-var car_body_list = [];
+var car_body = 'common';
 
 $('.body-btn').click(function() {
     let body = $(this).val();
-    let index = car_body_list.indexOf(body);
-    if(index >= 0) { // 이미 존재
-        car_body_list.splice(index, 1);
+    if(car_body != body) {
+        // 기존 거 색깔 변형
+        $('#'+car_body).css({"color": "white", "background-color": "#B38664"});
 
-        $(this).css({"color": "white", "background-color": "#B38664"});
-    } else {
-        car_body_list.push(body);
-
+        // update
+        car_body = body;
         $(this).css({"color": "#B38664", "background-color": "white"});
     }
 });
@@ -175,8 +173,8 @@ function continueFunction() {
     console.log("인원 수 : ", person, " 명")
 
     // 외형
-    console.log("외형 : ", car_body_list);
-    location.href = 'sub?user-income=' + yearIncome + '&min=' + minLimit + '&max=' + maxLimit +'&people=' + person + '&body-type=' + car_body_list[0];
+    console.log("외형 : ", car_body);
+    location.href = 'sub?user-income=' + yearIncome + '&min=' + minLimit + '&max=' + maxLimit +'&people=' + person + '&body-type=' + car_body;
 }
 
 

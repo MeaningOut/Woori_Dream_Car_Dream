@@ -341,6 +341,11 @@ label > p {
     background-color: #B38664;
 }
 
+#common {
+    background-color: white;
+    color: #B38664;
+}
+
 .body-btn:hover {
     background-color: white;
     color: #B38664;

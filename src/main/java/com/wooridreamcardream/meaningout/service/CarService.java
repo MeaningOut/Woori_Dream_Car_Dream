@@ -68,7 +68,7 @@ public class CarService {
     }
     @Transactional
     public List<CarWooriResponseDto> dream(String userIncome, BigDecimal minimum, BigDecimal maximum,  int people, String bodyType, String environmentalProtection, String fuelEconomy, String boycottInJapan, String patrioticCampaign, String vegan) {
-        String url = "http://localhost:5000";
+        String url = "http://ec2-3-26-96-242.ap-southeast-2.compute.amazonaws.com:5000";
         WebClient webClient = WebClient.builder().baseUrl(url).build();
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -94,12 +94,15 @@ public class CarService {
         // 2. CarPythonResponseDto to CarWooriRequestDto
         List<CarWooriRequestDto> requestDtos = new ArrayList<>();
         Map<Long, String> similarityData = new HashMap<>();
-
+        int t_arget = 0;
         for (CarPythonResponseDto dto: list) {
+            if (t_arget > 30)
+                break;
+            t_arget += 1;
             requestDtos.add(new CarWooriRequestDto(Long.valueOf(dto.getId()), new RequestDataBody(userIncome, dto.getAvg_price())));
             similarityData.put(Long.valueOf(dto.getId()), dto.getSimilarity());
 //            System.out.println(dto.getId() + " " + dto.getSimilarity());
-            Car car = carRepository.findById(Long.valueOf(dto.getId())).orElseThrow(() -> new IllegalArgumentException("해당 북마크가 없습니다. company = " + dto.getId()));
+//            Car car = carRepository.findById(Long.valueOf(dto.getId())).orElseThrow(() -> new IllegalArgumentException("해당 북마크가 없습니다. company = " + dto.getId()));
 //            System.out.println("id: " + String.valueOf(car.getId()) + ", big_title: " + car.getCategory().getCategoryName() + ", sub_title: " + car.getName());
         }
 

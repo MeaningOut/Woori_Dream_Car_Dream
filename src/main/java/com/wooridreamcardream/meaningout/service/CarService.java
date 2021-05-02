@@ -98,78 +98,72 @@ public class CarService {
         for (CarPythonResponseDto dto: list) {
             requestDtos.add(new CarWooriRequestDto(Long.valueOf(dto.getId()), new RequestDataBody(userIncome, dto.getAvg_price())));
             similarityData.put(Long.valueOf(dto.getId()), dto.getSimilarity());
-            System.out.println(dto.getId() + " " + dto.getSimilarity());
+//            System.out.println(dto.getId() + " " + dto.getSimilarity());
             Car car = carRepository.findById(Long.valueOf(dto.getId())).orElseThrow(() -> new IllegalArgumentException("해당 북마크가 없습니다. company = " + dto.getId()));
-            System.out.println("id: " + String.valueOf(car.getId()) + ", big_title: " + car.getCategory().getCategoryName() + ", sub_title: " + car.getName());
+//            System.out.println("id: " + String.valueOf(car.getId()) + ", big_title: " + car.getCategory().getCategoryName() + ", sub_title: " + car.getName());
         }
 
         // 1000개 -> 999, 10개 ->
         // 한도 범위 검사 open api
-//        final List<Map<Long, String>>[] strs = new List[]{new ArrayList<>()};
-//
-//        Disposable dispose = Flux.fromIterable(requestDtos)
-//                .concatMap( // 객체 순서 보장
-//                    arg -> {
-//                        Mono<Map<Long, String>> result = wooriApi(arg).map(count -> {
-//                                    Map<Long, String> item = new HashMap<>();
-//                                    item.put(arg.getCarId(), count);
-//                                    return item;
-//                                });
-//                        return result;
-//                })
-//                .collectList()
-//                .subscribe((data) -> {
-//                    strs[0] = data;});
-//
-//        while (true){
-//            if (dispose.isDisposed()) {
-//                System.out.println(strs[0]);
-//                break;
-//            }
-//            else {
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//        System.out.println("check scope");
-//        List<Map<Long, String>> objects = strs[0];
+        final List<Map<Long, String>>[] strs = new List[]{new ArrayList<>()};
+
+        Disposable dispose = Flux.fromIterable(requestDtos)
+                .concatMap( // 객체 순서 보장
+                    arg -> {
+                        Mono<Map<Long, String>> result = wooriApi(arg).map(count -> {
+                                    Map<Long, String> item = new HashMap<>();
+                                    item.put(arg.getCarId(), count);
+                                    return item;
+                                });
+                        return result;
+                })
+                .collectList()
+                .subscribe((data) -> {
+                    strs[0] = data;});
+
+        while (true){
+            if (dispose.isDisposed()) {
+                System.out.println(strs[0]);
+                break;
+            }
+            else {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        System.out.println("check scope");
+        List<Map<Long, String>> objects = strs[0];
         List<Long> possible_ids = new ArrayList<>();
-//        Map<Long, BigDecimal> loanData = new HashMap<>();
-//        ObjectMapper mapper = new ObjectMapper();
-//        for (Map<Long, String> object: objects) {
-//
-//            object.forEach((key, value)->
-//            {
-//                try {
-//                    System.out.println(key + value);
-//                    Map<String, Object> m_ap = new HashMap<>();
-//                    m_ap = mapper.readValue(value, new TypeReference<Map<String, Object>>(){});
-//                    Map<String, String> m__ap = mapper.convertValue(m_ap.get("dataBody"), Map.class);
-//
-//                    BigDecimal LN_AVL_AM = new BigDecimal(m__ap.get("LN_AVL_AM"));
-//                    if (LN_AVL_AM.compareTo(minimum) > 0 && LN_AVL_AM.compareTo(maximum) < 0) {
-//
-//                        System.out.println(LN_AVL_AM);
-//                        possible_ids.add(key);
-//                        loanData.put(key, LN_AVL_AM);
-//                    }
-//
-//                } catch (JsonProcessingException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//        }
+        Map<Long, BigDecimal> loanData = new HashMap<>();
+        ObjectMapper mapper = new ObjectMapper();
+        for (Map<Long, String> object: objects) {
+
+            object.forEach((key, value)->
+            {
+                try {
+                    System.out.println(key + value);
+                    Map<String, Object> m_ap = new HashMap<>();
+                    m_ap = mapper.readValue(value, new TypeReference<Map<String, Object>>(){});
+                    Map<String, String> m__ap = mapper.convertValue(m_ap.get("dataBody"), Map.class);
+
+                    BigDecimal LN_AVL_AM = new BigDecimal(m__ap.get("LN_AVL_AM"));
+                    if (LN_AVL_AM.compareTo(minimum) > 0 && LN_AVL_AM.compareTo(maximum) < 0) {
+
+                        System.out.println(LN_AVL_AM);
+                        possible_ids.add(key);
+                        loanData.put(key, LN_AVL_AM);
+                    }
+
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
         int target = 0;
 
-        possible_ids.add(1L);
-        possible_ids.add(2L);
-        possible_ids.add(3L);
-        possible_ids.add(4L);
-        possible_ids.add(5L);
-        possible_ids.add(6L);
         List<CarResponseDto> carInIds = carRepository.findByIdIn(possible_ids).stream().map(CarResponseDto::new).collect(Collectors.toList());
         List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
 
@@ -182,6 +176,7 @@ public class CarService {
         }
         return carWooriResponseDtos;
     }
+
     public Mono<String> wooriApi(CarWooriRequestDto requestDto) {
         String url = "https://openapi.wooribank.com:444";
         WebClient webClient = WebClient.builder().baseUrl(url).build();

@@ -113,7 +113,7 @@ function make_card(id, img_src, name, big_title, company, company_logo, loan, mi
     var $new = '<div class="col-lg-4 col-md-6 d-flex align-items-stretch">'+
         '<div class="card"><img src=' + img_src + ' class="card-img-top">' +
         '<div class="card-icon"><i class="bx bx-book-reader" onclick="detailsFunction(\'' + id + '\')"></i></div>'+
-        '<div class="card-body"><h3 class="card-title"><a href="">'+ big_title + ' '+ name + '</a></h3>'+
+        '<div class="card-body"><h3 class="card-title"><a onclick="detailsFunction(\'' + id + '\')"><span>' + big_title + '</span>'+ name + '</a></h3>'+
         '<div><span>' + company + '</span><img src='+ company_logo +'></div>' +
         '<span class="card-inner">대출한도 <b>'+loan+'만원</b></span>'+
         '<p class="card-inner">신차가격 <b>'+min_price+'만원 ~ '+max_price+'만원</b></p></div></div>';

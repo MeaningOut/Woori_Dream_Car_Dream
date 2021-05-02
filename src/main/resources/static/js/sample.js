@@ -14,7 +14,7 @@ $('.btn-move').hover(function() {  // mouse enter
 
 
 $('.closeEvent').on("click", function() {
-    alert('ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ');
+    location.href="/";
 });
 
 var checked_list = []
@@ -155,25 +155,24 @@ $("#slider-range").tooltip({
 });
 
 function continueFunction() {
-    console.log("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ");
     // 연소득
     if(yearIncome <= 0) {   // 연소득 입력 X
-        alert("연소득 입력해여");
+        alert("연소득을 입력하세요.");
         return;
     }
-    console.log('연소득 : ', yearIncome);
+    // console.log('연소득 : ', yearIncome);
 
     // 대출한도 : default 100만원 ~ 6000만원
     var minLimit = parseInt($('#min-price').text())*10000;
     var maxLimit = parseInt($('#max-price').text())*10000;
-    console.log('최소 : ', minLimit, " ~  최대 : ", maxLimit);
+    // console.log('최소 : ', minLimit, " ~  최대 : ", maxLimit);
 
     // 인원 수 
     var person = parseInt($('#person-cnt').text());
-    console.log("인원 수 : ", person, " 명")
+    // console.log("인원 수 : ", person, " 명")
 
     // 외형
-    console.log("외형 : ", car_body);
+    // console.log("외형 : ", car_body);
     location.href = 'sub?user-income=' + yearIncome + '&min=' + minLimit + '&max=' + maxLimit +'&people=' + person + '&body-type=' + car_body;
 }
 

@@ -434,6 +434,12 @@ section {
     text-align: center;
 }
 
+.why-us .card-title span {
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+}
+
 .why-us .card-title a {
     color: #000;
 }

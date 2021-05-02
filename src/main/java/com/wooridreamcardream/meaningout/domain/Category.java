@@ -34,4 +34,14 @@ public class Category {
     public Category(String categoryName) {
         this.categoryName = categoryName;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", categoryName='" + categoryName + '\'' +
+                ", carList=" + carList +
+                ", pictureList=" + pictureList +
+                '}';
+    }
 }

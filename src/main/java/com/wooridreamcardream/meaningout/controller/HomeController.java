@@ -19,10 +19,14 @@ public class HomeController {
     private final CarService carService;
 
     @GetMapping ("/")
-    public String index(Model model) {
-        return "home";
+    public String index() {
+        return "index";
     }
 
+    @GetMapping("/home")
+    public String home() {
+        return "home";
+    }
     @GetMapping("/sub")
     public String sub(@RequestParam("user-income") String user_income,
                       @RequestParam("min") BigDecimal minimum,

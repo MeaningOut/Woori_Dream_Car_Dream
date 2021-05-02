@@ -98,4 +98,28 @@ public class Car {
         this.gearShift = gearShift;
         this.imageUrl = imageUrl;
     }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "id=" + id +
+                ", category=" + category +
+                ", name='" + name + '\'' +
+                ", minPrice=" + minPrice +
+                ", maxPrice=" + maxPrice +
+                ", company='" + company + '\'' +
+                ", origin='" + origin + '\'' +
+                ", carType='" + carType + '\'' +
+                ", engine='" + engine + '\'' +
+                ", charger='" + charger + '\'' +
+                ", emission='" + emission + '\'' +
+                ", fuel='" + fuel + '\'' +
+                ", fuelEfficiency='" + fuelEfficiency + '\'' +
+                ", occupancy='" + occupancy + '\'' +
+                ", driveType='" + driveType + '\'' +
+                ", gearShift='" + gearShift + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", bookmarkedCarList=" + bookmarkedCarList +
+                '}';
+    }
 }

@@ -175,7 +175,7 @@ public class CarService {
             if (target > 9)
                 break;
             target += 1;
-            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, similarityData.get(carResponseDto.getId()), new BigDecimal(102113030), company.getImageUrl()));
+            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, similarityData.get(carResponseDto.getId()), loanData.get(carResponseDto.getId()), company.getImageUrl()));
         }
         return carWooriResponseDtos;
     }

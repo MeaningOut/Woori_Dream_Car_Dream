@@ -94,13 +94,11 @@ public class CarService {
         // 2. CarPythonResponseDto to CarWooriRequestDto
         List<CarWooriRequestDto> requestDtos = new ArrayList<>();
         Map<Long, String> similarityData = new HashMap<>();
-        int target = 0;
+
         for (CarPythonResponseDto dto: list) {
-            if (target > 10)
-                break;
-            target += 1;
             requestDtos.add(new CarWooriRequestDto(Long.valueOf(dto.getId()), new RequestDataBody(userIncome, dto.getAvg_price())));
             similarityData.put(Long.valueOf(dto.getId()), dto.getSimilarity());
+            System.out.println(String.valueOf(dto.getId()) + " " + dto.getSimilarity());
         }
 
         // 1000개 -> 999, 10개 ->
@@ -151,6 +149,7 @@ public class CarService {
 
                     BigDecimal LN_AVL_AM = new BigDecimal(m__ap.get("LN_AVL_AM"));
                     if (LN_AVL_AM.compareTo(minimum) > 0 && LN_AVL_AM.compareTo(maximum) < 0) {
+
                         System.out.println(LN_AVL_AM);
                         possible_ids.add(key);
                         loanData.put(key, LN_AVL_AM);
@@ -161,12 +160,15 @@ public class CarService {
                 }
             });
         }
-
+        int target = 0;
         List<CarResponseDto> carInIds = carRepository.findByIdIn(possible_ids).stream().map(CarResponseDto::new).collect(Collectors.toList());
         List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
 
         for (CarResponseDto carResponseDto: carInIds) {
             Company company = companyRepository.findByName(carResponseDto.getCompany()).orElseThrow(() -> new IllegalArgumentException("해당 북마크가 없습니다. company = " + carResponseDto.getCompany()));
+            if (target > 9)
+                break;
+            target += 1;
             carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, similarityData.get(carResponseDto.getId()), loanData.get(carResponseDto.getId()), company.getImageUrl()));
         }
         return carWooriResponseDtos;

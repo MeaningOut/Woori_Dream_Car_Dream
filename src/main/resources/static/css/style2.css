@@ -1,0 +1,294 @@
+@font-face {
+    font-family: 'dwmodern';
+    src: url('static/font/DXMgoRB-KSCpc-EUC-H.ttf');
+}
+
+body {
+    background-color: #7AB9EA;
+}
+
+.added-detailed-wrap {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-family: "dwmodern","Magul Gothic";
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    padding: 0;
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1120px;
+    height: 580px;
+    margin: 0;
+    transform: translate(-50%,-50%);
+}
+
+.added-detailed-text {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-family: "dwmodern","Magul Gothic";
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 10px 15px rgba(0,0,0,.1);
+}
+
+h1 {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    text-align: center;
+    padding: 0;
+    box-sizing: border-box;
+    margin: .67em 0;
+    padding-top: 70px;
+    font-family: "HyundaiSansHeadKR";
+    font-size: 30px;
+    letter-spacing: -.4px;
+    color: #000;
+    line-height: 1;
+    font-weight: 500;
+}
+
+h1 > p {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    margin-top: 30px;
+    font-family: "dwmodern";
+    font-size: 18px;
+    letter-spacing: -.4px;
+    color: #666;
+    line-height: 1;
+}
+
+.added-option-wrap {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-family: "dwmodern","Magul Gothic";
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    text-align: center;
+    padding: 0;
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    margin: 60px 0 100px;
+}
+
+.added-option-list {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-family: "dwmodern","Magul Gothic";
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    text-align: center;
+    margin: 0;
+    box-sizing: border-box;
+    list-style: none;
+    padding: 0;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+ul {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-family: "dwmodern","Magul Gothic";
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    text-align: center;
+    margin: 0;
+    box-sizing: border-box;
+    list-style: none;
+    padding: 0;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+li {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-family: "dwmodern","Magul Gothic";
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    list-style: none;
+    padding: 0;
+    box-sizing: border-box;
+    position: relative;
+    margin: 0 15px;
+}
+
+input {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    list-style: none;
+    margin: 0;
+    overflow: visible;
+    border-radius: 0;
+    font-family: "dwmodern";
+    font-size: 14px;
+    letter-spacing: -.4px;
+    color: #000;
+    line-height: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    transform: translateX(-50%);
+    z-index: 5;
+    border: 0;
+    background: transparent;
+    appearance: none;
+}
+
+label {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-family: "dwmodern","Magul Gothic";
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    list-style: none;
+    margin: 0;
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    width: 190px;
+    height: 277px;
+    padding: 40px 30px;
+    border-radius: 3px;
+    background-color: #ededf1;
+}
+
+h2 {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    list-style: none;
+    padding: 0;
+    box-sizing: border-box;
+    display: block;
+    height: 48px;
+    overflow: hidden;
+    margin: 10px 0 15px;
+    font-family: "HyundaiSansHeadKR";
+    font-size: 20px;
+    letter-spacing: -.4px;
+    color: #000;
+    line-height: 24px;
+    font-weight: 500;
+}
+
+label > p {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: block;
+    overflow: hidden;
+    height: 74px;
+    font-family: "dwmodern";
+    font-size: 16px;
+    letter-spacing: -.4px;
+    color: #000;
+    line-height: 24px;
+    font-weight: 400;
+}
+
+.btn-recommend {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    box-sizing: border-box;
+    background-color: transparent;
+    position: absolute;
+    left: 50%;
+    bottom: -100px;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 200px;
+    height: 55px;
+    border-radius: 31px;
+    border: 3px solid #000;
+    font-family: "dwmodern";
+    font-size: 18px;
+    letter-spacing: -.4px;
+    color: #000;
+    line-height: 1;
+    transform: translateX(-50%);
+}
+
+.close {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-family: "dwmodern","Magul Gothic";
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 10;
+    top: 30px;
+    right: 30px;
+}
+
+.closeEvent {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    overflow: visible;
+    text-transform: none;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    -webkit-appearance: button;
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
+.div-svg {
+    fill: white;
+}
+
+.btn-image {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    overflow: visible;
+    text-transform: none;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    -webkit-appearance: button;
+    position: relative;
+    width: 35px;
+    height: 35px;
+}

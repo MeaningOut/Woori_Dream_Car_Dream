@@ -7,9 +7,11 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.wooridreamcardream.meaningout.domain.Car;
 import com.wooridreamcardream.meaningout.domain.Category;
 
+import com.wooridreamcardream.meaningout.domain.Company;
 import com.wooridreamcardream.meaningout.dto.*;
 import com.wooridreamcardream.meaningout.repository.CarRepository;
 import com.wooridreamcardream.meaningout.repository.CategoryRepository;
+import com.wooridreamcardream.meaningout.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -38,6 +40,7 @@ import java.util.stream.Collectors;
 public class CarService {
     private final CarRepository carRepository;
     private final CategoryRepository categoryRepository;
+    private final CompanyRepository companyRepository;
 
     @Transactional
     public List<CarResponseDto> findByMinPriceAndMaxPrice(BigDecimal minPrice, BigDecimal maxPrice) {
@@ -64,18 +67,18 @@ public class CarService {
         return car.getId();
     }
     @Transactional
-    public List<CarResponseDto> dream(String userIncome, BigDecimal minimum, BigDecimal maximum,  int people, String bodyType, String environmentalProtection, String fuelEconomy, String boycottInJapan, String patrioticCampaign, String vegan) {
+    public List<CarWooriResponseDto> dream(String userIncome, BigDecimal minimum, BigDecimal maximum,  int people, String bodyType, String environmentalProtection, String fuelEconomy, String boycottInJapan, String patrioticCampaign, String vegan) {
         String url = "http://localhost:5000";
         WebClient webClient = WebClient.builder().baseUrl(url).build();
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("people", String.valueOf(people));
         params.add("body-type", bodyType);
-        params.add("environmental-protection", environmentalProtection);
-        params.add("fuel-economy",fuelEconomy);
-        params.add("boycott-in-japan", boycottInJapan);
-        params.add("patriotic-campaign", patrioticCampaign);
-        params.add("vegan", vegan);
+        params.add("e", environmentalProtection);
+        params.add("f",fuelEconomy);
+        params.add("b", boycottInJapan);
+        params.add("p", patrioticCampaign);
+        params.add("v", vegan);
         // 추천 시스템
         Mono<CarPythonResponseDto[]> response = webClient.get().uri(uriBuilder -> uriBuilder
                         .path("/refined-cars")
@@ -90,26 +93,16 @@ public class CarService {
 
         // 2. CarPythonResponseDto to CarWooriRequestDto
         List<CarWooriRequestDto> requestDtos = new ArrayList<>();
+        Map<Long, String> similarityData = new HashMap<>();
         int target = 0;
         for (CarPythonResponseDto dto: list) {
             if (target > 10)
                 break;
             target += 1;
             requestDtos.add(new CarWooriRequestDto(Long.valueOf(dto.getId()), new RequestDataBody(userIncome, dto.getAvg_price())));
+            similarityData.put(Long.valueOf(dto.getId()), dto.getSimilarity());
         }
-//        List<CarWooriRequestDto> requestDtos = new ArrayList<>();
-//        requestDtos.add(new CarWooriRequestDto(1L,new RequestDataBody(userIncome, "30000000") ));
-//        requestDtos.add(new CarWooriRequestDto(2L,new RequestDataBody(userIncome, "20000000") ));
-//        requestDtos.add(new CarWooriRequestDto(3L,new RequestDataBody(userIncome, "15000000") ));
-//        requestDtos.add(new CarWooriRequestDto(4L,new RequestDataBody(userIncome, "60000000") ));
-//        requestDtos.add(new CarWooriRequestDto(5L,new RequestDataBody(userIncome, "2000000") ));
-//        requestDtos.add(new CarWooriRequestDto(6L,new RequestDataBody(userIncome, "15650000") ));
-//        requestDtos.add(new CarWooriRequestDto(7L,new RequestDataBody(userIncome, "33570000") ));
-//        requestDtos.add(new CarWooriRequestDto(8L,new RequestDataBody(userIncome, "11000000") ));
-//        requestDtos.add(new CarWooriRequestDto(9L,new RequestDataBody(userIncome, "29000000") ));
-//        requestDtos.add(new CarWooriRequestDto(10L,new RequestDataBody(userIncome, "42000000") ));
-//        requestDtos.add(new CarWooriRequestDto(11L,new RequestDataBody(userIncome, "2800000") ));
-//        requestDtos.add(new CarWooriRequestDto(12L,new RequestDataBody(userIncome, "60000000") ));
+
         // 1000개 -> 999, 10개 ->
         // 한도 범위 검사 open api
         final List<Map<Long, String>>[] strs = new List[]{new ArrayList<>()};
@@ -144,6 +137,7 @@ public class CarService {
         System.out.println("check scope");
         List<Map<Long, String>> objects = strs[0];
         List<Long> possible_ids = new ArrayList<>();
+        Map<Long, BigDecimal> loanData = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         for (Map<Long, String> object: objects) {
 
@@ -159,6 +153,7 @@ public class CarService {
                     if (LN_AVL_AM.compareTo(minimum) > 0 && LN_AVL_AM.compareTo(maximum) < 0) {
                         System.out.println(LN_AVL_AM);
                         possible_ids.add(key);
+                        loanData.put(key, LN_AVL_AM);
                     }
 
                 } catch (JsonProcessingException e) {
@@ -168,7 +163,13 @@ public class CarService {
         }
 
         List<CarResponseDto> carInIds = carRepository.findByIdIn(possible_ids).stream().map(CarResponseDto::new).collect(Collectors.toList());
-        return carInIds;
+        List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
+
+        for (CarResponseDto carResponseDto: carInIds) {
+            Company company = companyRepository.findByName(carResponseDto.getCompany()).orElseThrow(() -> new IllegalArgumentException("해당 북마크가 없습니다. company = " + carResponseDto.getCompany()));
+            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, similarityData.get(carResponseDto.getId()), loanData.get(carResponseDto.getId()), company.getImageUrl()));
+        }
+        return carWooriResponseDtos;
     }
     public Mono<String> wooriApi(CarWooriRequestDto requestDto) {
         String url = "https://openapi.wooribank.com:444";

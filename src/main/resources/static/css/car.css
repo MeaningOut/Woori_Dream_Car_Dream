@@ -1,0 +1,108 @@
+body {
+    background-color: #7AB9EA;
+}
+
+.added-detailed-wrap {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-family: "HyundaiSansTextKR","Magul Gothic";
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    padding: 10px;
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1120px;
+    height: auto;
+    margin: 0;
+    margin-top: 500px;
+    margin-bottom: 500px;
+    transform: translate(-50%,-50%);
+}
+
+.added-detailed-text {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-family: "HyundaiSansTextKR","Magul Gothic";
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 10px 15px rgba(0,0,0,.1);
+}
+
+#container
+{
+    width:100%;
+    height:100%;
+    margin:0 auto;
+    padding:0;
+}
+
+#car-box
+{
+    width:27%;
+    /* margin:0.6666%; */
+    margin: 15px 10px 15px 10px;
+    padding:0;
+    height:auto;
+    display: inline-block;
+    box-shadow: 0 10px 15px rgba(.3,.3,.3,.3);
+    background: white;
+}
+
+.car-spec-box {
+    background: #464646;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    padding: 5px;
+}
+.car-cost-box{
+    width:50%;
+    color: white;
+    display: flex;
+    line-height: 1.6;
+    flex-direction: column;
+    padding: 5px;
+}
+.car-brand-box {
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+}
+.car-details-box{
+    padding: 5px;
+    width:50%;
+    display: flex;
+    flex-direction: column;
+}
+#one, #two
+{
+    float:left;
+}
+#three
+{
+    float:right;
+}
+
+
+@media screen and (max-width: 600px)
+{
+    #one, #two, #three
+    {
+        width:100%;
+        margin:5px 0;
+        display:block;
+    }
+
+}

@@ -1,0 +1,490 @@
+/**
+* Template Name: Siimple - v4.1.0
+* Template URL: https://bootstrapmade.com/free-bootstrap-landing-page/
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
+*/
+
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+body {
+    font-family: "Open Sans", sans-serif;
+    color: #444444;
+    background-color: #7AB9EA;
+}
+
+a {
+    text-decoration: none;
+    color: #3A8DFD;
+}
+
+a:hover {
+    color: #ff8f4c;
+    text-decoration: none;
+}
+
+h2, h3, h4, h5, h6, .font-primary {
+    font-family: "Raleway", sans-serif;
+}
+
+img {
+    object-fit: none;
+}
+
+
+/*--------------------------------------------------------------
+# Navigation Menu
+--------------------------------------------------------------*/
+.nav-menu {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 9999;
+    overflow-y: auto;
+    right: -260px;
+    width: 260px;
+    padding-top: 18px;
+    background: rgba(34, 34, 34, 0.8);
+    transition: 0.4s;
+}
+
+.nav-menu * {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-menu a {
+    display: block;
+    position: relative;
+    color: #ffd2b7;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-menu a:hover, .nav-menu .active > a, .nav-menu li:hover > a {
+    color: #ffa26a;
+    text-decoration: none;
+}
+
+.nav-menu .drop-down > a:after {
+    content: "\e9ac";
+    font-family: "boxicons";
+    padding-left: 10px;
+    position: absolute;
+    right: 15px;
+}
+
+.nav-menu .active.drop-down > a:after {
+    content: "\e9ac";
+}
+
+.nav-menu .drop-down > a {
+    padding-right: 35px;
+}
+
+.nav-menu .drop-down ul {
+    display: none;
+    overflow: hidden;
+}
+
+.nav-menu ul.drop-down-active {
+    display: block;
+}
+
+.nav-menu .drop-down li {
+    padding-left: 20px;
+}
+
+.nav-menu-active {
+    right: 0;
+}
+
+.nav-toggle {
+    position: fixed;
+    right: 15px;
+    top: 15px;
+    z-index: 9998;
+    border: 0;
+    background: rgba(34, 34, 34, 0.5);
+    transition: all 0.4s;
+    outline: none !important;
+    line-height: 1;
+    cursor: pointer;
+    text-align: right;
+    padding: 10px 12px;
+    border-radius: 2px;
+}
+
+.nav-toggle i {
+    color: #fff;
+    font-size: 18px;
+}
+
+.nav-toggle-active {
+    right: 275px;
+}
+
+/*--------------------------------------------------------------
+# Navigation Menu
+--------------------------------------------------------------*/
+/**
+* Desktop Navigation
+*/
+.navbar {
+    padding: 0;
+}
+
+.navbar ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    list-style: none;
+    align-items: center;
+}
+
+.navbar li {
+    position: relative;
+}
+
+.navbar a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 10px 30px;
+    font-family: "Raleway", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #884922;
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+.navbar a i {
+    font-size: 12px;
+    line-height: 0;
+    margin-left: 5px;
+}
+
+.navbar a:hover, .navbar .active, .navbar li:hover > a {
+    color: #3A8DFD;
+}
+
+.navbar .getstarted {
+    background: #3A8DFD;
+    padding: 8px 20px;
+    margin-left: 30px;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.navbar .getstarted:hover {
+    color: #fff;
+    background: #fd7827;
+}
+
+.navbar .dropdown ul {
+    display: block;
+    position: absolute;
+    left: 14px;
+    top: calc(100% + 30px);
+    margin: 0;
+    padding: 10px 0;
+    z-index: 99;
+    opacity: 0;
+    visibility: hidden;
+    background: #fff;
+    box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+    transition: 0.3s;
+    border-radius: 4px;
+}
+
+.navbar .dropdown ul li {
+    min-width: 200px;
+}
+
+.navbar .dropdown ul a {
+    padding: 10px 20px;
+    font-size: 15px;
+    text-transform: none;
+    font-weight: 600;
+}
+
+.navbar .dropdown ul a i {
+    font-size: 12px;
+}
+
+.navbar .dropdown ul a:hover, .navbar .dropdown ul .active:hover, .navbar .dropdown ul li:hover > a {
+    color: #3A8DFD;
+}
+
+.navbar .dropdown:hover > ul {
+    opacity: 1;
+    top: 100%;
+    visibility: visible;
+}
+
+.navbar .dropdown .dropdown ul {
+    top: 0;
+    left: calc(100% - 30px);
+    visibility: hidden;
+}
+
+.navbar .dropdown .dropdown:hover > ul {
+    opacity: 1;
+    top: 0;
+    left: 100%;
+    visibility: visible;
+}
+
+@media (max-width: 1366px) {
+    .navbar .dropdown .dropdown ul {
+        left: -90%;
+    }
+    .navbar .dropdown .dropdown:hover > ul {
+        left: -100%;
+    }
+}
+
+/**
+* Mobile Navigation
+*/
+.mobile-nav-toggle {
+    color: #000;
+    font-size: 28px;
+    cursor: pointer;
+    display: none;
+    line-height: 0;
+    transition: 0.5s;
+}
+
+.mobile-nav-toggle.bi-x {
+    color: #fff;
+}
+
+@media (max-width: 991px) {
+    .mobile-nav-toggle {
+        display: block;
+    }
+    .navbar ul {
+        display: none;
+    }
+}
+
+.navbar-mobile {
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(75, 40, 19, 0.9);
+    transition: 0.3s;
+}
+
+.navbar-mobile .mobile-nav-toggle {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.navbar-mobile ul {
+    display: block;
+    position: absolute;
+    top: 55px;
+    right: 15px;
+    bottom: 15px;
+    left: 15px;
+    padding: 10px 0;
+    border-radius: 10px;
+    background-color: #fff;
+    overflow-y: auto;
+    transition: 0.3s;
+}
+
+.navbar-mobile a {
+    padding: 10px 20px;
+    font-size: 15px;
+    color: #000;
+}
+
+.navbar-mobile a:hover, .navbar-mobile .active, .navbar-mobile li:hover > a {
+    color: #3A8DFD;
+}
+
+.navbar-mobile .getstarted {
+    margin: 15px;
+}
+
+.navbar-mobile .dropdown ul {
+    position: static;
+    display: none;
+    margin: 10px 20px;
+    padding: 10px 0;
+    z-index: 99;
+    opacity: 1;
+    visibility: visible;
+    background: #fff;
+    box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+}
+
+.navbar-mobile .dropdown ul li {
+    min-width: 200px;
+}
+
+.navbar-mobile .dropdown ul a {
+    padding: 10px 20px;
+}
+
+.navbar-mobile .dropdown ul a i {
+    font-size: 12px;
+}
+
+.navbar-mobile .dropdown ul a:hover, .navbar-mobile .dropdown ul .active:hover, .navbar-mobile .dropdown ul li:hover > a {
+    color: #3A8DFD;
+}
+
+.navbar-mobile .dropdown > .dropdown-active {
+    display: block;
+}
+
+/*--------------------------------------------------------------
+# Sections General
+--------------------------------------------------------------*/
+section {
+    padding: 80px 40px;
+}
+
+.section-bg {
+    background-color: #7AB9EA;
+}
+
+.section-title {
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+.section-title h2 {
+    font-size: 32px;
+    font-weight: 300;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 80px;
+    height: 1px;
+    background: #3A8DFD;
+    bottom: 0;
+    left: calc(50% - 40px);
+}
+
+.section-title p {
+    margin-bottom: 0;
+    font-style: italic;
+    color: #666666;
+}
+
+/*--------------------------------------------------------------
+# Why Us
+--------------------------------------------------------------*/
+.why-us {
+    padding-bottom: 30px;
+}
+
+.why-us .card {
+    border-radius: 3px;
+    border: 0;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 50px;
+}
+
+.why-us .card-icon {
+    text-align: center;
+    margin-top: -32px;
+}
+
+.why-us .card-icon i {
+    font-size: 32px;
+    color: #fff;
+    width: 64px;
+    height: 64px;
+    padding-top: 10px;
+    text-align: center;
+    background-color: #3A8DFD;
+    border-radius: 50%;
+    text-align: center;
+    border: 4px solid #fff;
+    transition: 0.3s;
+    display: inline-block;
+}
+
+.why-us .card-body {
+    padding-top: 12px;
+}
+
+.why-us .card-title {
+    font-weight: 700;
+    text-align: center;
+}
+
+.why-us .card-title a {
+    color: #000;
+}
+
+.why-us .card-title a:hover {
+    color: #3A8DFD;
+}
+
+.why-us .card-text {
+    color: #5e5e5e;
+}
+
+.why-us .card:hover .card-icon i {
+    background: #fff;
+    color: #3A8DFD;
+}
+
+@media (max-width: 1024px) {
+    .why-us {
+        background-attachment: scroll;
+    }
+}
+
+.card-body div {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.card-inner {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-left: 10px;
+    font-size: 12px;
+    display: inline-block;
+    color: gray;
+}
+
+.card-body b {
+    font-size: 18px;
+    color: #0083CB;
+    margin-left: 5px;
+}
+
+#title {
+    width: 100%;
+    display:flex;
+    color: white;
+    justify-content: center;
+    font-weight: 900;
+    margin-top: 50px;
+}

@@ -1,6 +1,11 @@
 package com.wooridreamcardream.meaningout.service;
 
+import com.wooridreamcardream.meaningout.domain.Category;
+import com.wooridreamcardream.meaningout.domain.Picture;
+import com.wooridreamcardream.meaningout.dto.CategorySaveRequestDto;
 import com.wooridreamcardream.meaningout.dto.PictureResponseDto;
+import com.wooridreamcardream.meaningout.dto.PictureSaveRequestDto;
+import com.wooridreamcardream.meaningout.repository.CategoryRepository;
 import com.wooridreamcardream.meaningout.repository.PictureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,9 +18,20 @@ import java.util.List;
 @Service
 public class PictureService {
     private final PictureRepository pictureRepository;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
     public List<PictureResponseDto> findByCategoryId(Long categoryId) {
         return pictureRepository.findByCategoryId(categoryId).stream().map(PictureResponseDto::new).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Long save(PictureSaveRequestDto pictureSaveRequestDto) {
+        Category category = categoryRepository.findByCategoryName(pictureSaveRequestDto.getCategoryName())
+                .orElseGet(() -> categoryRepository.save(new CategorySaveRequestDto(pictureSaveRequestDto.getCategoryName()).toEntity()));
+
+        Picture picture = pictureRepository.findByCategoryIdAndImageUrl(category.getId(), pictureSaveRequestDto.getImageUrl())
+                .orElseGet(() -> pictureRepository.save(pictureSaveRequestDto.toEntity(category)));
+        return picture.getId();
     }
 }

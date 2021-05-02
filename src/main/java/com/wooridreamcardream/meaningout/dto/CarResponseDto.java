@@ -14,6 +14,7 @@ public class CarResponseDto {
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
     private String company;
+    private String charger;
     private String carType;
     private String engine;
     private String emission;
@@ -33,6 +34,7 @@ public class CarResponseDto {
         this.company = entity.getCompany();
         this.carType = entity.getCarType();
         this.engine = entity.getEngine();
+        this.charger = entity.getCharger();
         this.emission = entity.getEmission();
         this.fuel = entity.getFuel();
         this.fuelEfficiency = entity.getFuelEfficiency();

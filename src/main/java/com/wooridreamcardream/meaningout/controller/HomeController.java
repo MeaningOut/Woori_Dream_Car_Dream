@@ -5,8 +5,9 @@ import com.wooridreamcardream.meaningout.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,11 +18,22 @@ public class HomeController {
 
     private final CarService carService;
 
-    @RequestMapping(value="/car")
+    @GetMapping ("/")
     public String index(Model model) {
-        List<CarResponseDto> responseDto = carService.findByMinPriceAndMaxPrice(new BigDecimal(1655300000), new BigDecimal(1888608800));
-        model.addAttribute("title", "title");
-        model.addAttribute("cars", responseDto);
-        return "car";
+        return "home";
+    }
+
+    @GetMapping("/sub")
+    public String sub(@RequestParam("user-income") String user_income,
+                      @RequestParam("min") BigDecimal minimum,
+                      @RequestParam("max") BigDecimal maximum,
+                      @RequestParam("people") int people,
+                      @RequestParam("body-type") String body_type, Model model) {
+        model.addAttribute("userIncome", user_income);
+        model.addAttribute("minimum", minimum);
+        model.addAttribute("maximum", maximum);
+        model.addAttribute("people", people);
+        model.addAttribute("bodyType", body_type);
+        return "sub";
     }
 }

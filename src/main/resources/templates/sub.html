@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" th:href="@{/css/style2.css}">
+</head>
+<body>
+    <div id="__nuxt">
+        <div id="__layout">
+            <div id="app">
+                <section class="container">
+                    <div class="close">
+                        <button type="button" class="btn closeEvent">
+                            <img th:src="@{/images/x.png}" alt="btn-image" class="btn-image">
+                        </button>
+                    </div>
+                    <div class="added-detailed-wrap">
+                        <section class="added-detailed-text">
+                            <h1>어떤 소비신념을 가지셨나요?</h1>
+                            <p>적어도 2개 이상 선택해주세요!</p>
+                            <article class="added-option-wrap">
+                                <ul class="added-option-list">
+                                    <li>
+                                        <input id="input1" type="checkbox" name="checkBx" value="e-protection">
+                                        <label for="input1">
+                                            <div class="div-svg">
+                                                <svg viewBox="0 0 512 512" width="50" title="check-circle">
+                                                    <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
+                                                </svg>
+                                              </div>
+                                            <h2>환경친화적</h2>
+                                            <p>대기오염 걱정 마세요!!!</p>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <input id="input2" type="checkbox" name="checkBx" value="fuel-efficiency">
+                                        <label for="input2">
+                                            <div class="div-svg">
+                                                <svg viewBox="0 0 512 512" width="50" title="check-circle">
+                                                    <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
+                                                </svg>
+                                              </div>
+                                            <h2>연비좋은차</h2>
+                                            <p>대기오염 걱정 마세요!!!</p>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <input id="input3" type="checkbox" name="checkBx" value="boycott-in-japan">
+                                        <label for="input3">
+                                            <div class="div-svg">
+                                                <svg viewBox="0 0 512 512" width="50" title="check-circle">
+                                                    <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
+                                                </svg>
+                                              </div>
+                                            <h2>일본불매</h2>
+                                            <p>대기오염 걱정 마세요!!!</p>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <input id="input4" type="checkbox" name="checkBx" value="patriotic">
+                                        <label for="input4">
+                                            <div class="div-svg">
+                                                <svg viewBox="0 0 512 512" width="50" title="check-circle">
+                                                    <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
+                                                </svg>
+                                              </div>
+                                            <h2>애국캠페인</h2>
+                                            <p>대기오염 걱정 마세요!!!</p>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <input id="input5" type="checkbox" name="checkBx" value="vegan">
+                                        <label for="input5">
+                                            <div class="div-svg">
+                                                <svg viewBox="0 0 512 512" width="50" title="check-circle">
+                                                    <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
+                                                </svg>
+                                              </div>
+                                            <h2>비건자동차</h2>
+                                            <p>대기오염 걱정 마세요!!!</p>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </article>
+                        </section>
+                        <a th:attr="onclick=|recommendFunction('${userIncome}','${minimum}','${maximum}','${people}','${bodyType}')|" class="btn-recommend" data-link-area="내차찾기-기본항목 선택" data-link-name="추천결과보기">
+                            추천결과보기
+                        </a>
+                    </div> 
+                </section>
+            </div>
+        </div>
+    </div>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js' type='text/javascript'></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script th:src="@{/js/sample.js}" type="text/javascript"></script>
+</body>
+</html>

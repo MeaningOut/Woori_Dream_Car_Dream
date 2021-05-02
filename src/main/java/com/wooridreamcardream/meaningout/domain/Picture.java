@@ -1,5 +1,6 @@
 package com.wooridreamcardream.meaningout.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,4 +21,10 @@ public class Picture {
 
     @Column(name="image_url", nullable=false)
     private String imageUrl;
+
+    @Builder
+    public Picture(Category category, String imageUrl) {
+        this.category = category;
+        this.imageUrl = imageUrl;
+    }
 }

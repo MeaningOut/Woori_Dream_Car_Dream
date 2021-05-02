@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Hello</title>
+</head>
+<body>
+            id;
+            category;
+    <table border="1">
+        <tr>
+            <td>id</td>
+            <td>name</td>
+            <td>minPrice</td>
+            <td>maxPrice</td>
+            <td>company</td>
+            <td>carType</td>
+            <td>engine</td>
+            <td>emission</td>
+            <td>fuel</td>
+            <td>fuelEfficiency</td>
+            <td>occupancy</td>
+            <td>driveType</td>
+            <td>gearShift</td>
+            <td>imageUrl</td>
+        </tr>
+        <tr th:each="car: ${cars}">
+            <td th:text="${car.getId()}">id</td>
+            <td th:text="${car.getName()}">name</td>
+            <td th:text="${car.getMinPrice()}">minPrice</td>
+            <td th:text="${car.getMaxPrice()}">maxPrice</td>
+            <td th:text="${car.getCompany()}">company</td>
+            <td th:text="${car.getCarType()}">carType</td>
+            <td th:text="${car.getEngine()}">engine</td>
+            <td th:text="${car.getEmission()}">emission</td>
+            <td th:text="${car.getFuel()}">fuel</td>
+            <td th:text="${car.getFuelEfficiency()}">fuelEfficiency</td>
+            <td th:text="${car.getOccupancy()}">occupancy</td>
+            <td th:text="${car.getDriveType()}">driveType</td>
+            <td th:text="${car.getGearShift()}">gearShift</td>
+            <td>
+                <img th:src="${car.getImageUrl()}" alt="" height=100 width=100/>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

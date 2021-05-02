@@ -182,9 +182,7 @@ function continueFunction() {
 
 
 function recommendFunction(income, minimum, maximum, people, type) {
-    if(checked_list.length < 2) {  // 2개 미만
-
-    } else {  // 2개 이상
+    if(checked_list.length == 2 || checked_list.length == 3) {
         console.log(checked_list);
         var dictObject = {};
         dictObject['e-protection'] = 'N';
@@ -198,5 +196,7 @@ function recommendFunction(income, minimum, maximum, people, type) {
         }
         // 다음창으로 넘어감
         location.href = 'car/dream?user-income=' + income + '&min=' + minimum +'&max=' + maximum + '&people=' + people + '&body-type=' + type + '&e=' + dictObject['e-protection'] + '&f=' + dictObject['fuel-efficiency'] + '&b=' + dictObject['boycott-in-japan'] + '&p=' + dictObject['patriotic'] + '&v=' + dictObject['vegan'];
+    } else {
+        alert("2개 또는 3개만 선택하세요");
     }
 }

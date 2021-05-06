@@ -68,10 +68,6 @@ public class Car {
     @Column(name="image_url", nullable = true)
     private String imageUrl;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "car")
-    private Collection<BookmarkedCar> bookmarkedCarList = new ArrayList<BookmarkedCar>();
-
     @Builder
     public Car(Category category, String name,
                BigDecimal minPrice, BigDecimal maxPrice,
@@ -119,7 +115,6 @@ public class Car {
                 ", driveType='" + driveType + '\'' +
                 ", gearShift='" + gearShift + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", bookmarkedCarList=" + bookmarkedCarList +
                 '}';
     }
 }

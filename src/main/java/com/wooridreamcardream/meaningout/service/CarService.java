@@ -68,7 +68,7 @@ public class CarService {
     }
     @Transactional
     public List<CarWooriResponseDto> dream(String userIncome, BigDecimal minimum, BigDecimal maximum,  int people, String bodyType, String environmentalProtection, String fuelEconomy, String boycottInJapan, String patrioticCampaign, String vegan) {
-        String url = "http://ec2-3-26-96-242.ap-southeast-2.compute.amazonaws.com:5000";
+        String url = "http://127.0.0.1:5000";
         WebClient webClient = WebClient.builder().baseUrl(url).build();
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();

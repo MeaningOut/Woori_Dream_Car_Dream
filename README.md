@@ -7,6 +7,9 @@ Spring Boot
 # 서버 구조
 ![img.png](img.png)
 
+# 추천 기능 흐름도
+![image](https://user-images.githubusercontent.com/53392870/117311735-6d429a00-aebf-11eb-9f81-03e582a9e7e8.png)
+
 # 화면 구성
 ### 시작화면
 <img src="https://user-images.githubusercontent.com/53392870/117307503-982aef00-aebb-11eb-951a-b71d8efc4309.png">

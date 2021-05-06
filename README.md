@@ -2,8 +2,10 @@
 우리은행 해커톤 Spring boot 서버
 
 # 기술
+Spring Boot
 
 # 서버 구조
+![img.png](img.png)
 
 # 화면 구성
 ### 시작화면

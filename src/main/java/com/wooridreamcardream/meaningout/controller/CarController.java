@@ -1,7 +1,7 @@
 package com.wooridreamcardream.meaningout.controller;
 
-import com.wooridreamcardream.meaningout.dto.CarResponseDto;
-import com.wooridreamcardream.meaningout.dto.CarWooriResponseDto;
+import com.wooridreamcardream.meaningout.dto.car.CarResponseDto;
+import com.wooridreamcardream.meaningout.dto.car.CarWooriResponseDto;
 import com.wooridreamcardream.meaningout.dto.PictureResponseDto;
 import com.wooridreamcardream.meaningout.service.CarService;
 import com.wooridreamcardream.meaningout.service.PictureService;
@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.wooridreamcardream.meaningout.dto;
+package com.wooridreamcardream.meaningout.dto.car;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.wooridreamcardream.meaningout.dto;
+package com.wooridreamcardream.meaningout.dto.car;
 
 import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import lombok.Builder;

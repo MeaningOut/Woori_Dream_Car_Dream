@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CarRepository extends JpaRepository<Car, Long>{
-    List<Car> findByMinPriceGreaterThanEqualAndMaxPriceLessThanEqual(BigDecimal minPrice, BigDecimal maxPrice);
     Optional<Car> findByCategoryIdAndName(Long category_id, String name);
     List<Car> findByIdIn(List<Long> ids);
 }

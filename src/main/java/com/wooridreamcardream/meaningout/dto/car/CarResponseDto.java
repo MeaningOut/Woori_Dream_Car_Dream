@@ -1,4 +1,4 @@
-package com.wooridreamcardream.meaningout.dto;
+package com.wooridreamcardream.meaningout.dto.car;
 
 import com.wooridreamcardream.meaningout.domain.Car;
 import com.wooridreamcardream.meaningout.domain.Category;

@@ -3,20 +3,17 @@ package com.wooridreamcardream.meaningout.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.wooridreamcardream.meaningout.domain.Car;
 import com.wooridreamcardream.meaningout.domain.Category;
 
 import com.wooridreamcardream.meaningout.domain.Company;
 import com.wooridreamcardream.meaningout.dto.*;
+import com.wooridreamcardream.meaningout.dto.car.*;
 import com.wooridreamcardream.meaningout.repository.CarRepository;
 import com.wooridreamcardream.meaningout.repository.CategoryRepository;
 import com.wooridreamcardream.meaningout.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -26,13 +23,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -42,10 +35,6 @@ public class CarService {
     private final CategoryRepository categoryRepository;
     private final CompanyRepository companyRepository;
 
-    @Transactional
-    public List<CarResponseDto> findByMinPriceAndMaxPrice(BigDecimal minPrice, BigDecimal maxPrice) {
-        return carRepository.findByMinPriceGreaterThanEqualAndMaxPriceLessThanEqual(minPrice, maxPrice).stream().map(CarResponseDto::new).collect(Collectors.toList());
-    }
     @Transactional
     public List<CarResponseDto> findAll() {
         return carRepository.findAll().stream().map(CarResponseDto::new).collect(Collectors.toList());
@@ -67,7 +56,7 @@ public class CarService {
         return car.getId();
     }
     @Transactional
-    public List<CarWooriResponseDto> dream(String userIncome, BigDecimal minimum, BigDecimal maximum,  int people, String bodyType, String environmentalProtection, String fuelEconomy, String boycottInJapan, String patrioticCampaign, String vegan) {
+    public List<CarWooriResponseDto> dream(String userIncome, BigDecimal minimum, BigDecimal maximum, int people, String bodyType, String environmentalProtection, String fuelEconomy, String boycottInJapan, String patrioticCampaign, String vegan) {
         String url = "http://127.0.0.1:5000";
         WebClient webClient = WebClient.builder().baseUrl(url).build();
 
@@ -79,6 +68,7 @@ public class CarService {
         params.add("b", boycottInJapan);
         params.add("p", patrioticCampaign);
         params.add("v", vegan);
+
         // 추천 시스템
         Mono<CarPythonResponseDto[]> response = webClient.get().uri(uriBuilder -> uriBuilder
                         .path("/refined-cars")
@@ -94,19 +84,11 @@ public class CarService {
         // 2. CarPythonResponseDto to CarWooriRequestDto
         List<CarWooriRequestDto> requestDtos = new ArrayList<>();
         Map<Long, String> similarityData = new HashMap<>();
-        int t_arget = 0;
         for (CarPythonResponseDto dto: list) {
-            if (t_arget > 30)
-                break;
-            t_arget += 1;
             requestDtos.add(new CarWooriRequestDto(Long.valueOf(dto.getId()), new RequestDataBody(userIncome, dto.getAvg_price())));
             similarityData.put(Long.valueOf(dto.getId()), dto.getSimilarity());
-//            System.out.println(dto.getId() + " " + dto.getSimilarity());
-//            Car car = carRepository.findById(Long.valueOf(dto.getId())).orElseThrow(() -> new IllegalArgumentException("해당 북마크가 없습니다. company = " + dto.getId()));
-//            System.out.println("id: " + String.valueOf(car.getId()) + ", big_title: " + car.getCategory().getCategoryName() + ", sub_title: " + car.getName());
         }
 
-        // 1000개 -> 999, 10개 ->
         // 한도 범위 검사 open api
         final List<Map<Long, String>>[] strs = new List[]{new ArrayList<>()};
 
@@ -137,7 +119,7 @@ public class CarService {
                 }
             }
         }
-        System.out.println("check scope");
+
         List<Map<Long, String>> objects = strs[0];
         List<Long> possible_ids = new ArrayList<>();
         Map<Long, BigDecimal> loanData = new HashMap<>();
@@ -147,15 +129,14 @@ public class CarService {
             object.forEach((key, value)->
             {
                 try {
-                    System.out.println(key + value);
                     Map<String, Object> m_ap = new HashMap<>();
                     m_ap = mapper.readValue(value, new TypeReference<Map<String, Object>>(){});
                     Map<String, String> m__ap = mapper.convertValue(m_ap.get("dataBody"), Map.class);
 
+//                  API로부터 반환받은 대출 한도 금액(LN_AVL_AM)이 사용자가 입력한 대출 범위에 있는지 확인
                     BigDecimal LN_AVL_AM = new BigDecimal(m__ap.get("LN_AVL_AM"));
                     if (LN_AVL_AM.compareTo(minimum) > 0 && LN_AVL_AM.compareTo(maximum) < 0) {
-
-                        System.out.println(LN_AVL_AM);
+//                      범위에 들어가면 possible_ids에 추가
                         possible_ids.add(key);
                         loanData.put(key, LN_AVL_AM);
                     }
@@ -165,16 +146,12 @@ public class CarService {
                 }
             });
         }
-        int target = 0;
 
         List<CarResponseDto> carInIds = carRepository.findByIdIn(possible_ids).stream().map(CarResponseDto::new).collect(Collectors.toList());
         List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
 
         for (CarResponseDto carResponseDto: carInIds) {
             Company company = companyRepository.findByName(carResponseDto.getCompany()).orElseThrow(() -> new IllegalArgumentException("해당 북마크가 없습니다. company = " + carResponseDto.getCompany()));
-            if (target > 9)
-                break;
-            target += 1;
             carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, similarityData.get(carResponseDto.getId()), loanData.get(carResponseDto.getId()), company.getImageUrl()));
         }
         return carWooriResponseDtos;

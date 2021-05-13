@@ -27,4 +27,10 @@ public class Picture {
         this.category = category;
         this.imageUrl = imageUrl;
     }
+
+    public Picture(Long id, Category category, String imageUrl) {
+        this.id = id;
+        this.category = category;
+        this.imageUrl = imageUrl;
+    }
 }

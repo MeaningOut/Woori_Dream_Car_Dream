@@ -52,7 +52,7 @@
           <div class="col-md-7 col-lg-6">
             <div class="about-content" data-aos="fade-left" data-aos-delay="100">
 
-              <h2 th:inline="text"><span th:text="${car.getCategory().getCategoryName()}">2021 벤츠 G클래스</span>[[${car.getName()}]]</h2>
+              <h2 th:inline="text"><span th:text="${car.getCategory().getName()}">2021 벤츠 G클래스</span>[[${car.getName()}]]</h2>
               <ul class="list-unstyled">
                 <li th:text="'> 엔진형식 ' + ${car.getEngine()}"><i class="bi bi-chevron-right"></i> 엔진형식 I6</li>
                 <li th:text="'> '+${car.getCharger()}"><i class="bi bi-chevron-right"></i>트윈 터보</li>

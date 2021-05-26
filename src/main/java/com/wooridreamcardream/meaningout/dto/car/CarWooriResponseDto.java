@@ -1,6 +1,7 @@
 package com.wooridreamcardream.meaningout.dto.car;
 
 import com.wooridreamcardream.meaningout.domain.Category;
+import com.wooridreamcardream.meaningout.domain.Company;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -12,7 +13,7 @@ public class CarWooriResponseDto {
     private String name;
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
-    private String company;
+    private Company company;
     private String carType;
     private String engine;
     private String emission;

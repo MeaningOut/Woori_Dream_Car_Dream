@@ -28,7 +28,7 @@ public class PictureService {
     @Transactional
     public Long save(PictureSaveRequestDto pictureSaveRequestDto) {
         // 존재하지 않는 카테고리이면 카테고리를 생성
-        Category category = categoryRepository.findByCategoryName(pictureSaveRequestDto.getCategoryName())
+        Category category = categoryRepository.findByName(pictureSaveRequestDto.getCategoryName())
                 .orElseGet(() -> categoryRepository.save(new CategorySaveRequestDto(pictureSaveRequestDto.getCategoryName()).toEntity()));
 
         Picture picture = pictureRepository.findByCategoryIdAndImageUrl(category.getId(), pictureSaveRequestDto.getImageUrl())

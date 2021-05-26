@@ -2,6 +2,7 @@ package com.wooridreamcardream.meaningout.dto.car;
 
 import com.wooridreamcardream.meaningout.domain.Car;
 import com.wooridreamcardream.meaningout.domain.Category;
+import com.wooridreamcardream.meaningout.domain.Company;
 import com.wooridreamcardream.meaningout.repository.CategoryRepository;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class CarSaveRequestDto {
     private String name;
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
-    private String company;
+    private String companyName;
     private String origin;
     private String carType;
     private String engine;
@@ -32,7 +33,7 @@ public class CarSaveRequestDto {
     @Builder
     public CarSaveRequestDto(String categoryName, String name,
                              BigDecimal minPrice, BigDecimal maxPrice,
-                             String company, String origin,
+                             String companyName, String origin,
                              String carType, String engine,
                              String charger, String emission,
                              String fuel, String fuelEfficiency,
@@ -42,7 +43,7 @@ public class CarSaveRequestDto {
         this.name = name;
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
-        this.company = company;
+        this.companyName = companyName;
         this.origin = origin;
         this.carType = carType;
         this.engine = engine;
@@ -56,7 +57,7 @@ public class CarSaveRequestDto {
         this.imageUrl = imageUrl;
     }
 
-    public Car toEntity(Category category) {
+    public Car toEntity(Category category, Company company) {
         return Car.builder()
                 .category(category)
                 .name(name)

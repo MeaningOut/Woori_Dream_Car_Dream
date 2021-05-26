@@ -48,15 +48,21 @@ public class CarService {
 
     @Transactional
     public Long save(CarSaveRequestDto carSaveRequestDto) {
-        Category category = categoryRepository.findByCategoryName(carSaveRequestDto.getCategoryName())
+        // company 객체가 있는지 확인하는 부분 isValidCompany로 뺄 것.
+        Company company = companyRepository.findByName(carSaveRequestDto.getCompanyName())
+                .orElseGet(() -> companyRepository.save(new CompanySaveRequestDto(carSaveRequestDto.getCompanyName()).toEntity()));
+        // category 객체가 있는지 확인하는 부분 isValidCategory로 뺄 것.
+        Category category = categoryRepository.findByName(carSaveRequestDto.getCategoryName())
                 .orElseGet(() -> categoryRepository.save(new CategorySaveRequestDto(carSaveRequestDto.getCategoryName()).toEntity()));
 
         Car car = carRepository.findByCategoryIdAndName(category.getId(), carSaveRequestDto.getName())
-                .orElseGet(() -> carRepository.save(carSaveRequestDto.toEntity(category)));
+                .orElseGet(() -> carRepository.save(carSaveRequestDto.toEntity(category, company)));
         return car.getId();
     }
     @Transactional
     public List<CarWooriResponseDto> dream(String userIncome, BigDecimal minimum, BigDecimal maximum, int people, String bodyType, String environmentalProtection, String fuelEconomy, String boycottInJapan, String patrioticCampaign, String vegan) {
+
+        // 추천 시스템 요청 부분
         String url = "http://127.0.0.1:5000";
         WebClient webClient = WebClient.builder().baseUrl(url).build();
 
@@ -80,6 +86,8 @@ public class CarService {
         // 추천 시스템 json 처리
         // 1. json to list, CarPythonResponseDto
         CarPythonResponseDto[] list = response.block();
+
+        // 여기까지
 
         // 2. CarPythonResponseDto to CarWooriRequestDto
         List<CarWooriRequestDto> requestDtos = new ArrayList<>();
@@ -151,8 +159,8 @@ public class CarService {
         List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
 
         for (CarResponseDto carResponseDto: carInIds) {
-            Company company = companyRepository.findByName(carResponseDto.getCompany()).orElseThrow(() -> new IllegalArgumentException("해당 북마크가 없습니다. company = " + carResponseDto.getCompany()));
-            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, similarityData.get(carResponseDto.getId()), loanData.get(carResponseDto.getId()), company.getImageUrl()));
+            Company company = companyRepository.findByName(carResponseDto.getCompany().getName()).orElseThrow(() -> new IllegalArgumentException("해당 북마크가 없습니다. company = " + carResponseDto.getCompany()));
+            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, similarityData.get(carResponseDto.getId()), loanData.get(carResponseDto.getId()), company.getLogo()));
         }
         return carWooriResponseDtos;
     }

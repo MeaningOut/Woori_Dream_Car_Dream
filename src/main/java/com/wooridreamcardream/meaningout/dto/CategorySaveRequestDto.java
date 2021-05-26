@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class CategorySaveRequestDto {
-    private String categoryName;
+    private String name;
 
-    public CategorySaveRequestDto(String categoryName) {
-        this.categoryName = categoryName;
+    public CategorySaveRequestDto(String name) {
+        this.name = name;
     }
 
     public Category toEntity() {
         return Category.builder()
-                .categoryName(categoryName)
+                .name(name)
                 .build();
     }
 }

@@ -32,8 +32,9 @@ public class Car {
     @Column(name="max_price", nullable=false)
     private BigDecimal maxPrice;
 
-    @Column(name="company", nullable=false)
-    private String company;
+    @ManyToOne
+    @JoinColumn(name="company_id")
+    private Company company;
 
     @Column(name="origin", nullable=false)
     private String origin;
@@ -71,7 +72,7 @@ public class Car {
     @Builder
     public Car(Category category, String name,
                BigDecimal minPrice, BigDecimal maxPrice,
-               String company, String origin,
+               Company company, String origin,
                String carType, String engine,
                String charger, String emission,
                String fuel, String fuelEfficiency,

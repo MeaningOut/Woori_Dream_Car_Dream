@@ -7,10 +7,10 @@ public class CategorySaveRequestDtoTest {
     @Test
     public void category_롬복_기능_테스트() {
         //given
-        String categoryName = "hyundai";
+        String name = "Hyundai IONIQ 5";
         //when
-        CategorySaveRequestDto dto = new CategorySaveRequestDto(categoryName);
+        CategorySaveRequestDto dto = new CategorySaveRequestDto(name);
         //then
-        assertThat(dto.getCategoryName()).isEqualTo(categoryName);
+        assertThat(dto.getName()).isEqualTo(name);
     }
 }

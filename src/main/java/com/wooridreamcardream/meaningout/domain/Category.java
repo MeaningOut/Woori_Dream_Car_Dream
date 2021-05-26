@@ -19,8 +19,8 @@ public class Category {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name= "category_name", nullable=false, unique=true)
-    private String categoryName;
+    @Column(name= "name", nullable=false, unique=true)
+    private String name;
 
     @JsonIgnore
     @OneToMany(mappedBy = "category")
@@ -31,19 +31,19 @@ public class Category {
     private Collection<Picture> pictureList = new ArrayList<Picture>();
 
     @Builder
-    public Category(String categoryName) {
-        this.categoryName = categoryName;
+    public Category(String name) {
+        this.name = name;
     }
 
-    public Category(Long id, String categoryName) {
+    public Category(Long id, String name) {
         this.id = id;
-        this.categoryName = categoryName;
+        this.name = name;
     }
     @Override
     public String toString() {
         return "Category{" +
                 "id=" + id +
-                ", categoryName='" + categoryName + '\'' +
+                ", name='" + name + '\'' +
                 ", carList=" + carList +
                 ", pictureList=" + pictureList +
                 '}';

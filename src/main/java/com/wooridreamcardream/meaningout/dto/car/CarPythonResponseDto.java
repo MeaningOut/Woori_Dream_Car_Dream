@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 @Getter
 public class CarPythonResponseDto {
     private String id;
-    private String avg_price;
-    private String similarity;
+    private String avg_price; // 차량 가격
+    private String similarity; // 사용자 소비 신념 유사도
 
     public CarPythonResponseDto(@JsonProperty("id") String id, @JsonProperty("avg_price") String avgPrice, @JsonProperty("similarity") String similarity) {
         this.id = id;

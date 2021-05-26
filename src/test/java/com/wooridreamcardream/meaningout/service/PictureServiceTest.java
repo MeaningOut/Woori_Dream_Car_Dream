@@ -3,8 +3,9 @@ package com.wooridreamcardream.meaningout.service;
 import com.wooridreamcardream.meaningout.domain.Category;
 import com.wooridreamcardream.meaningout.domain.Picture;
 import com.wooridreamcardream.meaningout.dto.PictureSaveRequestDto;
+import com.wooridreamcardream.meaningout.repository.CategoryRepository;
 import com.wooridreamcardream.meaningout.repository.PictureRepository;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -26,42 +27,46 @@ public class PictureServiceTest {
     @Mock
     private PictureRepository pictureRepository;
 
+    @Mock
+    private CategoryRepository categoryRepository;
+
     @Test
     public void 사진_저장() {
         //given
         PictureSaveRequestDto dto = createPictureRequest();
-        Category category = new Category(1L, "hyundai");
-        Picture picture = new Picture(1L, category, "imageUrl");
+        Picture picture = createPictureEntity(dto);
 
-//        Long fakePictureId = 1L;
-//        ReflectionTestUtils.setField(picture, "id", fakePictureId);
+        Long fakePictureId = 1L;
+        ReflectionTestUtils.setField(picture, "id", fakePictureId);
 
         // mocking
         given(pictureRepository.save(any())).willReturn(picture);
-//        given(pictureRepository.findById(fakePictureId)).willReturn(Optional.ofNullable(picture));
+        given(pictureRepository.findById(fakePictureId)).willReturn(Optional.ofNullable(picture));
 
         //when
-//        Long newPictureId = pictureService.save(dto);
+        Long newPictureId = pictureService.save(dto);
 
         //then
-//        Picture findPicture = pictureRepository.findById(newPictureId).get();
+        Picture findPicture = pictureRepository.findById(newPictureId).get();
 
-//        assertEquals(picture.getId(), findPicture.getId());
-//        assertEquals(picture.getCategory().getCategoryName(), findPicture.getCategory().getCategoryName());
-//        assertEquals(picture.getImageUrl(), findPicture.getImageUrl());
+        assertEquals(picture.getId(), findPicture.getId());
+        assertEquals(picture.getCategory().getName(), findPicture.getCategory().getName());
+        assertEquals(picture.getImageUrl(), findPicture.getImageUrl());
     }
 
     private Picture createPictureEntity(PictureSaveRequestDto dto) {
-        return new Picture(1L, new Category(dto.getCategoryName()), dto.getImageUrl());
+        Category category = new Category(1L, "Hyundai IONIQ 5");
+        return new Picture(1L, category, dto.getImageUrl());
 //        return Picture.builder()
-//                .category(new Category(dto.getCategoryName()))
+//                .category(new Category(dto.getName()))
 //                .imageUrl(dto.getImageUrl())
 //                .build();
     }
 
+//    @Asy
     private PictureSaveRequestDto createPictureRequest() {
         PictureSaveRequestDto dto = PictureSaveRequestDto.builder()
-                .categoryName("hyundai")
+                .categoryName("Hyundai IONIQ 5")
                 .imageUrl("imageUrl")
                 .build();
         return dto;

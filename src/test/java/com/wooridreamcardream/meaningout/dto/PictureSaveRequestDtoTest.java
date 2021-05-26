@@ -8,12 +8,12 @@ public class PictureSaveRequestDtoTest {
     @Test
     public void pictureSaveRequestDto_롬복_기능_테스트() {
         //given
-        String categoryName = "hyundai";
+        String name = "Hyundai IONIQ 5";
         String imageUrl = "imageUrl";
         //when
-        PictureSaveRequestDto dto = new PictureSaveRequestDto(categoryName, imageUrl);
+        PictureSaveRequestDto dto = new PictureSaveRequestDto(name, imageUrl);
         //then
-        assertThat(dto.getCategoryName()).isEqualTo(categoryName);
+        assertThat(dto.getCategoryName()).isEqualTo(name);
         assertThat(dto.getImageUrl()).isEqualTo(imageUrl);
     }
 }

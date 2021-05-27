@@ -4,6 +4,7 @@ import com.wooridreamcardream.meaningout.dto.car.CarResponseDto;
 import com.wooridreamcardream.meaningout.dto.car.CarWooriResponseDto;
 import com.wooridreamcardream.meaningout.dto.PictureResponseDto;
 import com.wooridreamcardream.meaningout.service.CarService;
+import com.wooridreamcardream.meaningout.service.FlaskService;
 import com.wooridreamcardream.meaningout.service.PictureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import java.util.List;
 @Controller
 public class CarController {
     private final CarService carService;
+    private final FlaskService flaskService;
     private final PictureService pictureService;
 
     @GetMapping("/car/dream")

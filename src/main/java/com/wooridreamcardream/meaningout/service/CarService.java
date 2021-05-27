@@ -24,6 +24,8 @@ import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.web.reactive.function.BodyInserters.*;
+
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -66,103 +68,104 @@ public class CarService {
         String url = "http://127.0.0.1:5000";
         WebClient webClient = WebClient.builder().baseUrl(url).build();
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("people", String.valueOf(people));
-        params.add("body-type", bodyType);
-        params.add("e", environmentalProtection);
-        params.add("f",fuelEconomy);
-        params.add("b", boycottInJapan);
-        params.add("p", patrioticCampaign);
-        params.add("v", vegan);
-
         // 추천 시스템
-        Mono<CarPythonResponseDto[]> response = webClient.get().uri(uriBuilder -> uriBuilder
-                        .path("/refined-cars")
-                        .queryParams(params)
-                        .build())
+        Mono<CarPythonResponseDto[]> response = webClient.post()
+                        .uri("/refined-cars")
+                        .body(fromFormData("people", String.valueOf(people))
+                                .with("body-type", bodyType)
+                                .with("environmental-protection", environmentalProtection)
+                                .with("fuel-economy",fuelEconomy)
+                                .with("boycott-in-japan", boycottInJapan)
+                                .with("patriotic-campaign", patrioticCampaign)
+                                .with("vegan", vegan))
                         .retrieve()
                         .bodyToMono(CarPythonResponseDto[].class);
 
         // 추천 시스템 json 처리
         // 1. json to list, CarPythonResponseDto
         CarPythonResponseDto[] list = response.block();
-
-        // 여기까지
-
-        // 2. CarPythonResponseDto to CarWooriRequestDto
-        List<CarWooriRequestDto> requestDtos = new ArrayList<>();
-        Map<Long, String> similarityData = new HashMap<>();
         for (CarPythonResponseDto dto: list) {
-            requestDtos.add(new CarWooriRequestDto(Long.valueOf(dto.getId()), new RequestDataBody(userIncome, dto.getAvg_price())));
-            similarityData.put(Long.valueOf(dto.getId()), dto.getSimilarity());
+            System.out.println(dto);
         }
-
-        // 한도 범위 검사 open api
-        final List<Map<Long, String>>[] strs = new List[]{new ArrayList<>()};
-
-        Disposable dispose = Flux.fromIterable(requestDtos)
-                .concatMap( // 객체 순서 보장
-                    arg -> {
-                        Mono<Map<Long, String>> result = wooriApi(arg).map(count -> {
-                                    Map<Long, String> item = new HashMap<>();
-                                    item.put(arg.getCarId(), count);
-                                    return item;
-                                });
-                        return result;
-                })
-                .collectList()
-                .subscribe((data) -> {
-                    strs[0] = data;});
-
-        while (true){
-            if (dispose.isDisposed()) {
-                System.out.println(strs[0]);
-                break;
-            }
-            else {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        List<Map<Long, String>> objects = strs[0];
-        List<Long> possible_ids = new ArrayList<>();
-        Map<Long, BigDecimal> loanData = new HashMap<>();
-        ObjectMapper mapper = new ObjectMapper();
-        for (Map<Long, String> object: objects) {
-
-            object.forEach((key, value)->
-            {
-                try {
-                    Map<String, Object> m_ap = new HashMap<>();
-                    m_ap = mapper.readValue(value, new TypeReference<Map<String, Object>>(){});
-                    Map<String, String> m__ap = mapper.convertValue(m_ap.get("dataBody"), Map.class);
-
-//                  API로부터 반환받은 대출 한도 금액(LN_AVL_AM)이 사용자가 입력한 대출 범위에 있는지 확인
-                    BigDecimal LN_AVL_AM = new BigDecimal(m__ap.get("LN_AVL_AM"));
-                    if (LN_AVL_AM.compareTo(minimum) > 0 && LN_AVL_AM.compareTo(maximum) < 0) {
-//                      범위에 들어가면 possible_ids에 추가
-                        possible_ids.add(key);
-                        loanData.put(key, LN_AVL_AM);
-                    }
-
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-
-        List<CarResponseDto> carInIds = carRepository.findByIdIn(possible_ids).stream().map(CarResponseDto::new).collect(Collectors.toList());
         List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
 
-        for (CarResponseDto carResponseDto: carInIds) {
-            Company company = companyRepository.findByName(carResponseDto.getCompany().getName()).orElseThrow(() -> new IllegalArgumentException("해당 북마크가 없습니다. company = " + carResponseDto.getCompany()));
-            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, similarityData.get(carResponseDto.getId()), loanData.get(carResponseDto.getId()), company.getLogo()));
-        }
         return carWooriResponseDtos;
+//        // 여기까지
+//
+//        // 2. CarPythonResponseDto to CarWooriRequestDto
+//        List<CarWooriRequestDto> requestDtos = new ArrayList<>();
+//        Map<Long, String> similarityData = new HashMap<>();
+//        for (CarPythonResponseDto dto: list) {
+//            requestDtos.add(new CarWooriRequestDto(Long.valueOf(dto.getId()), new RequestDataBody(userIncome, dto.getAvg_price())));
+//            similarityData.put(Long.valueOf(dto.getId()), dto.getSimilarity());
+//        }
+//
+//        // 한도 범위 검사 open api
+//        final List<Map<Long, String>>[] strs = new List[]{new ArrayList<>()};
+//
+//        Disposable dispose = Flux.fromIterable(requestDtos)
+//                .concatMap( // 객체 순서 보장
+//                    arg -> {
+//                        Mono<Map<Long, String>> result = wooriApi(arg).map(count -> {
+//                                    Map<Long, String> item = new HashMap<>();
+//                                    item.put(arg.getCarId(), count);
+//                                    return item;
+//                                });
+//                        return result;
+//                })
+//                .collectList()
+//                .subscribe((data) -> {
+//                    strs[0] = data;});
+//
+//        while (true){
+//            if (dispose.isDisposed()) {
+//                System.out.println(strs[0]);
+//                break;
+//            }
+//            else {
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//
+//        List<Map<Long, String>> objects = strs[0];
+//        List<Long> possible_ids = new ArrayList<>();
+//        Map<Long, BigDecimal> loanData = new HashMap<>();
+//        ObjectMapper mapper = new ObjectMapper();
+//        for (Map<Long, String> object: objects) {
+//
+//            object.forEach((key, value)->
+//            {
+//                try {
+//                    Map<String, Object> m_ap = new HashMap<>();
+//                    m_ap = mapper.readValue(value, new TypeReference<Map<String, Object>>(){});
+//                    Map<String, String> m__ap = mapper.convertValue(m_ap.get("dataBody"), Map.class);
+//
+////                  API로부터 반환받은 대출 한도 금액(LN_AVL_AM)이 사용자가 입력한 대출 범위에 있는지 확인
+//                    BigDecimal LN_AVL_AM = new BigDecimal(m__ap.get("LN_AVL_AM"));
+//                    if (LN_AVL_AM.compareTo(minimum) > 0 && LN_AVL_AM.compareTo(maximum) < 0) {
+////                      범위에 들어가면 possible_ids에 추가
+//                        possible_ids.add(key);
+//                        loanData.put(key, LN_AVL_AM);
+//                    }
+//
+//                } catch (JsonProcessingException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+//        }
+//
+//        List<CarResponseDto> carInIds = carRepository.findByIdIn(possible_ids).stream().map(CarResponseDto::new).collect(Collectors.toList());
+//        List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
+//
+//        for (CarResponseDto carResponseDto: carInIds) {
+//            Company company = companyRepository.findByName(carResponseDto.getCompany().getName()).orElseThrow(() -> new IllegalArgumentException("해당 북마크가 없습니다. company = " + carResponseDto.getCompany()));
+//            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, similarityData.get(carResponseDto.getId()), loanData.get(carResponseDto.getId()), company.getLogo()));
+//        }
+//        return carWooriResponseDtos;
     }
 
     public Mono<String> wooriApi(CarWooriRequestDto requestDto) {

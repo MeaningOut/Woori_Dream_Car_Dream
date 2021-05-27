@@ -23,7 +23,7 @@ public class Company {
     private String name;
 
     @Column(name="logo", nullable=false)
-    private String logo;
+    private String logo; // 회사 로고 image url
 
     @OneToMany(mappedBy = "company")
     private Collection<Car> carList = new ArrayList<>();

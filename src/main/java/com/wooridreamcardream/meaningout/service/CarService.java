@@ -2,6 +2,7 @@ package com.wooridreamcardream.meaningout.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wooridreamcardream.meaningout.domain.Car;
 import com.wooridreamcardream.meaningout.domain.Category;
@@ -131,25 +132,34 @@ public class CarService {
 
             object.forEach((key, value)->
             {
+                Map<String, Object> jsonToMap = new HashMap<>();
                 try {
-                    Map<String, Object> m_ap = new HashMap<>();
-                    m_ap = mapper.readValue(value, new TypeReference<Map<String, Object>>(){});
-                    Map<String, String> m__ap = mapper.convertValue(m_ap.get("dataBody"), Map.class);
-
-//                  API로부터 반환받은 대출 한도 금액(LN_AVL_AM)이 사용자가 입력한 대출 범위에 있는지 확인
-                    BigDecimal LN_AVL_AM = new BigDecimal(m__ap.get("LN_AVL_AM"));
-                    if (LN_AVL_AM.compareTo(minimum) > 0 && LN_AVL_AM.compareTo(maximum) < 0) {
-                        loanData.put(key, LN_AVL_AM);
-                    }
-
+                    // 우리은행 API 응답값(JSON)을 Map<String, Object>로 변환합니다.
+                    jsonToMap = mapper.readValue(value, new TypeReference<Map<String, Object>>() {});
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
+                // dataBody의 value(JSON)을 Map<String, String)로 변환합니다.
+                // dataBody 내에 대출 한도 금액 정보가 포함되어 있습니다.
+                Map<String, String> dataBody = mapper.convertValue(jsonToMap.get("dataBody"), Map.class);
+
+                // 대출 한도 금액(LN_AVL_AM)이 사용자가 입력한 대출 범위에 있는지 확인
+                BigDecimal LN_AVL_AM = new BigDecimal(dataBody.get("LN_AVL_AM"));
+                if (LN_AVL_AM.compareTo(minimum) > 0 && LN_AVL_AM.compareTo(maximum) < 0)
+                    loanData.put(key, LN_AVL_AM);
+
             });
         }
         return loanData;
     }
 
+    /**
+     *
+     * 자동차 id만 반환합니다.
+     *
+     * @param cars 자동차 별 우리은행 API 응답값 (Long: 자동차 id, String: API 응답값)
+     * @return
+     */
     public List<Long> checkedValidCarId(Map<Long, BigDecimal> cars) {
         return new ArrayList<>(cars.keySet());
     }

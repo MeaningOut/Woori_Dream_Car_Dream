@@ -1,5 +1,6 @@
 package com.wooridreamcardream.meaningout.dto.car;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -12,6 +13,7 @@ public class FlaskRequestDto {
     private String patrioticCampaign;
     private String vegan;
 
+    @Builder
     public FlaskRequestDto(Integer people, String bodyType, String environmentalProtection, String fuelEconomy, String boycottInJapan, String patrioticCampaign, String vegan) {
         this.people = people;
         this.bodyType = bodyType;

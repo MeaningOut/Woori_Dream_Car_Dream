@@ -19,8 +19,6 @@ import java.util.Map;
 public class CarApiController {
 
     private final CarService carService;
-    private final FlaskService flaskService;
-    private final WooriHttpService wooriHttpService;
 
     @GetMapping("/api/v1/car")
     public List<CarResponseDto> findAll() {

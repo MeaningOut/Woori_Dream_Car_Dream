@@ -192,13 +192,13 @@ function recommendFunction(income, minimum, maximum, people, type) {
             dictObject[checked_list[i]] = 'Y';
         }
         // 다음창으로 넘어감
-        // location.href = 'car/dream?user-income=' + income + '&min=' + minimum +'&max=' + maximum + '&people=' + people + '&body-type=' + type + '&e=' + dictObject['e-protection'] + '&f=' + dictObject['fuel-efficiency'] + '&b=' + dictObject['boycott-in-japan'] + '&p=' + dictObject['patriotic'] + '&v=' + dictObject['vegan'];
+        // location.href = 'car/recommend?user-income=' + income + '&min=' + minimum +'&max=' + maximum + '&people=' + people + '&body-type=' + type + '&e=' + dictObject['e-protection'] + '&f=' + dictObject['fuel-efficiency'] + '&b=' + dictObject['boycott-in-japan'] + '&p=' + dictObject['patriotic'] + '&v=' + dictObject['vegan'];
 
         var form = document.createElement("form");
         var parm = new Array();
         var input = new Array();
 
-        form.action = "car/dream";
+        form.action = "car/recommend";
         form.method = "post";
 
         parm.push(['user-income', income]);

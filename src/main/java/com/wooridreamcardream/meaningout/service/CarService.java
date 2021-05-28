@@ -61,8 +61,22 @@ public class CarService {
         return car.getId();
     }
 
+    /**
+     *
+     * 1. 플라스크 추천 서버에 사용자 취향 정보 데이터 (소비신념)를 담아서 추천 자동차 요청을 보낸다.
+     * 2. 사용자 연 소득, 추천 자동차 가격을 담아서 우리은행 신차 대출 조회 API 요청을 보낸다.
+     * API 응답값은 자동차에 대한 사용자 대출 한도 금액이다.
+     * 3. API로부터 돌아온 사용자 대출 한도 금액이 사용자가 입력한 대출 한도 범위 (minimum과 maximum 사이)내에 들어가는지 확인한다.
+     * 4. 대출 한도 범위 내 자동차에 대해 회사 로고, 자동차 상세 정보를 데이터베이스로부터 가져온다.
+     *
+     * @param userIncome 사용자 연 소득
+     * @param minimum 사용자 대출 한도 범위 (최소)
+     * @param maximum 사용자 대출 한도 범위 (최대)
+     * @param data 소비신념 (추천 시스템 요청 시 필요)
+     * @return
+     */
     @Transactional
-    public List<CarWooriResponseDto> dream(String userIncome, BigDecimal minimum, BigDecimal maximum, FlaskRequestDto data) {
+    public List<CarWooriResponseDto> recommend(String userIncome, BigDecimal minimum, BigDecimal maximum, FlaskRequestDto data) {
         // 추천 시스템 요청
         CarPythonResponseDto[] list = flaskService.recommendedCars(data).block();
         for (CarPythonResponseDto dto : list) {
@@ -86,14 +100,16 @@ public class CarService {
         for (Map<Long, String> a : response) {
             System.out.println(a);
         }
-//        List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
-//        return carWooriResponseDtos;
-        // 여기까지
-//
-        List<Long> possible_ids = new ArrayList<>();
+
+        Map<Long, BigDecimal> loanData = checkedValidLoanData(response, minimum, maximum);
+
+        return getValidCarDetails(loanData);
+    }
+
+    public Map<Long, BigDecimal> checkedValidLoanData(List<Map<Long, String>> cars, BigDecimal minimum, BigDecimal maximum) {
         Map<Long, BigDecimal> loanData = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
-        for (Map<Long, String> object: response) {
+        for (Map<Long, String> object: cars) {
 
             object.forEach((key, value)->
             {
@@ -105,8 +121,6 @@ public class CarService {
 //                  API로부터 반환받은 대출 한도 금액(LN_AVL_AM)이 사용자가 입력한 대출 범위에 있는지 확인
                     BigDecimal LN_AVL_AM = new BigDecimal(m__ap.get("LN_AVL_AM"));
                     if (LN_AVL_AM.compareTo(minimum) > 0 && LN_AVL_AM.compareTo(maximum) < 0) {
-//                      범위에 들어가면 possible_ids에 추가
-                        possible_ids.add(key);
                         loanData.put(key, LN_AVL_AM);
                     }
 
@@ -115,13 +129,20 @@ public class CarService {
                 }
             });
         }
+        return loanData;
+    }
 
-        List<CarResponseDto> carInIds = findByIdIn(possible_ids);
+    public List<Long> checkedValidCarIds(Map<Long, BigDecimal> cars) {
+        return new ArrayList<Long>(cars.keySet());
+    }
+
+    public List<CarWooriResponseDto> getValidCarDetails(Map<Long, BigDecimal> cars) {
+        List<CarResponseDto> carInIds = findByIdIn(checkedValidCarIds(cars));
         List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
 
         for (CarResponseDto carResponseDto: carInIds) {
             CompanyResponseDto companyResponseDto = companyService.findByName(carResponseDto.getCompany().getName());
-            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, similarityData.get(carResponseDto.getId()), loanData.get(carResponseDto.getId()), companyResponseDto.getLogo()));
+            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, cars.get(carResponseDto.getId()), companyResponseDto.getLogo()));
         }
         return carWooriResponseDtos;
     }

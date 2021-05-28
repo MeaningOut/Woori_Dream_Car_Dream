@@ -5,7 +5,6 @@ import com.wooridreamcardream.meaningout.dto.car.CarWooriResponseDto;
 import com.wooridreamcardream.meaningout.dto.PictureResponseDto;
 import com.wooridreamcardream.meaningout.service.CarService;
 import com.wooridreamcardream.meaningout.dto.car.FlaskRequestDto;
-import com.wooridreamcardream.meaningout.service.FlaskService;
 import com.wooridreamcardream.meaningout.service.PictureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,15 +21,39 @@ import java.util.List;
 @Controller
 public class CarController {
     private final CarService carService;
-    private final FlaskService flaskService;
     private final PictureService pictureService;
 
-    @PostMapping("/car/dream")
-    public String dream(@RequestParam("user-income") String user_income, @RequestParam("min") BigDecimal minimum, @RequestParam("max") BigDecimal maximum, @RequestParam("people") int people, @RequestParam("body-type") String bodyType,
+
+    /**
+     *
+     * @param user_income 사용자 연 소득
+     * @param minimum 사용자 대출 한도 범위 (최소)
+     * @param maximum 사용자 대출 한도 범위 (최대)
+     * @param people 차량 인승
+     * @param bodyType 차량 외형
+     * @param environmentalProtection 소비신념 (
+     * @param fuelEconomy 소비신념 (연비 좋은 차)
+     * @param boycottInJapan 소비신념 (일본 불매)
+     * @param patrioticCampaign 소비신념 (애국 캠페인)
+     * @param vegan 소비신념 (비건 자동차)
+     * @param model
+     * @return
+     */
+    @PostMapping("/car/recommend")
+    public String recommend(@RequestParam("user-income") String user_income, @RequestParam("min") BigDecimal minimum, @RequestParam("max") BigDecimal maximum, @RequestParam("people") int people, @RequestParam("body-type") String bodyType,
                         @RequestParam("environmental-protection") String environmentalProtection,
                         @RequestParam("fuel-economy") String fuelEconomy, @RequestParam("boycott-in-japan") String boycottInJapan,
                         @RequestParam("patriotic-campaign") String patrioticCampaign, @RequestParam("vegan") String vegan, Model model) {
-        List<CarWooriResponseDto> dto = carService.dream(user_income, minimum, maximum, new FlaskRequestDto(people, bodyType, environmentalProtection, fuelEconomy, boycottInJapan, patrioticCampaign, vegan));
+        List<CarWooriResponseDto> dto = carService.recommend(user_income, minimum, maximum
+                , FlaskRequestDto.builder()
+                        .people(people)
+                        .bodyType(bodyType)
+                        .environmentalProtection(environmentalProtection)
+                        .fuelEconomy(fuelEconomy)
+                        .boycottInJapan(boycottInJapan)
+                        .patrioticCampaign(patrioticCampaign)
+                        .vegan(vegan)
+                        .build());
 
         model.addAttribute("cars", dto);
 
@@ -40,9 +63,11 @@ public class CarController {
     @GetMapping("/car/{id}/picture")
     public String details(@PathVariable Long id, Model model) {
         CarResponseDto dto = carService.findById(id);
-        List<PictureResponseDto> pictureResponseDtos = pictureService.findByCategoryId(dto.getCategory().getId());
+        List<PictureResponseDto> dtos = pictureService.findByCategoryId(dto.getCategory().getId());
+
         model.addAttribute("car", dto);
-        model.addAttribute("pictures", pictureResponseDtos);
+        model.addAttribute("pictures", dtos);
+
         return "details";
     }
 }

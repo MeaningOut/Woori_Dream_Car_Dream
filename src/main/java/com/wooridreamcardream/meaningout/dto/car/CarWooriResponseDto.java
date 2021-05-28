@@ -24,11 +24,10 @@ public class CarWooriResponseDto {
     private String driveType;
     private String gearShift;
     private String imageUrl;
-    private String similarity;
     private BigDecimal loanLimit;
     private String logoImageUrl;
 
-    public CarWooriResponseDto(CarResponseDto entity, String similarity, BigDecimal loanLimit, String logoImageUrl) {
+    public CarWooriResponseDto(CarResponseDto entity, BigDecimal loanLimit, String logoImageUrl) {
         this.id = entity.getId();
         this.category = entity.getCategory();
         this.name = entity.getName();
@@ -45,7 +44,6 @@ public class CarWooriResponseDto {
         this.driveType = entity.getDriveType();
         this.gearShift = entity.getGearShift();
         this.imageUrl = entity.getImageUrl();
-        this.similarity = similarity;
         this.loanLimit = loanLimit;
         this.logoImageUrl = logoImageUrl;
     }
@@ -69,7 +67,6 @@ public class CarWooriResponseDto {
                 ", driveType='" + driveType + '\'' +
                 ", gearShift='" + gearShift + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", similarity='" + similarity + '\'' +
                 ", loanLimit=" + loanLimit +
                 ", logoImageUrl='" + logoImageUrl + '\'' +
                 '}';

@@ -31,6 +31,11 @@ public class CarService {
     private final WooriHttpService wooriHttpService;
     private final CompanyService companyService;
 
+    /**
+     * findAll(), findById(Long id), findByIdIn(List<Long> ids) 모두 자동차의 데이터를 가지고 옵니다.
+     * 데이터 (아이디, 모델 명, 세부 명, 차 가격(최소), 차 가격(최대), 회사 명, 엔진 형식, 배기량, 연비(등급), 승차인원, 구동방식, 변속기)
+     * @return
+     */
     @Transactional
     public List<CarResponseDto> findAll() {
         return carRepository.findAll().stream().map(CarResponseDto::new).collect(Collectors.toList());
@@ -47,17 +52,26 @@ public class CarService {
         return carRepository.findByIdIn(ids).stream().map(CarResponseDto::new).collect(Collectors.toList());
     }
 
+    /**
+     *
+     * 회사와 모델명이 존재하는 지 확인합니다.
+     * 없으면 만듭니다.
+     * 자동차 데이터를 저장합니다.
+     *
+     * @param carSaveRequestDto 저장하고자 하는 자동차 데이터
+     * @return
+     */
     @Transactional
     public Long save(CarSaveRequestDto carSaveRequestDto) {
-        // company 객체가 있는지 확인하는 부분 isValidCompany로 뺄 것.
         Company company = companyRepository.findByName(carSaveRequestDto.getCompanyName())
                 .orElseGet(() -> companyRepository.save(new CompanySaveRequestDto(carSaveRequestDto.getCompanyName()).toEntity()));
-        // category 객체가 있는지 확인하는 부분 isValidCategory로 뺄 것.
+
         Category category = categoryRepository.findByName(carSaveRequestDto.getCategoryName())
                 .orElseGet(() -> categoryRepository.save(new CategorySaveRequestDto(carSaveRequestDto.getCategoryName()).toEntity()));
 
         Car car = carRepository.findByCategoryIdAndName(category.getId(), carSaveRequestDto.getName())
                 .orElseGet(() -> carRepository.save(carSaveRequestDto.toEntity(category, company)));
+
         return car.getId();
     }
 
@@ -79,9 +93,6 @@ public class CarService {
     public List<CarWooriResponseDto> recommend(String userIncome, BigDecimal minimum, BigDecimal maximum, FlaskRequestDto data) {
         // 추천 시스템 요청
         CarPythonResponseDto[] list = flaskService.recommendedCars(data).block();
-        for (CarPythonResponseDto dto : list) {
-            System.out.println(dto);
-        }
 
         List<CarWooriRequestDto> requestDtos = new ArrayList<>();
         Map<Long, String> similarityData = new HashMap<>();
@@ -97,9 +108,6 @@ public class CarService {
         }
 
         List<Map<Long, String>> response = wooriHttpService.request(requestDtos);
-        for (Map<Long, String> a : response) {
-            System.out.println(a);
-        }
 
         Map<Long, BigDecimal> loanData = checkedValidCar(response, minimum, maximum);
 

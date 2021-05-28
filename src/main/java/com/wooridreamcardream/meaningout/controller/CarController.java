@@ -20,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class CarController {
+
     private final CarService carService;
     private final PictureService pictureService;
 
@@ -41,7 +42,7 @@ public class CarController {
      * @return
      */
     @PostMapping("/car/recommend")
-    public String recommend(@RequestParam("user-income") String user_income, @RequestParam("min") BigDecimal minimum, @RequestParam("max") BigDecimal maximum, @RequestParam("people") int people, @RequestParam("body-type") String bodyType,
+    public String recommendCar(@RequestParam("user-income") String user_income, @RequestParam("min") BigDecimal minimum, @RequestParam("max") BigDecimal maximum, @RequestParam("people") int people, @RequestParam("body-type") String bodyType,
                         @RequestParam("environmental-protection") String environmentalProtection,
                         @RequestParam("fuel-economy") String fuelEconomy, @RequestParam("boycott-in-japan") String boycottInJapan,
                         @RequestParam("patriotic-campaign") String patrioticCampaign, @RequestParam("vegan") String vegan, Model model) {
@@ -71,7 +72,7 @@ public class CarController {
      * @return
      */
     @GetMapping("/car/{id}/picture")
-    public String details(@PathVariable Long id, Model model) {
+    public String getCarDetails(@PathVariable Long id, Model model) {
         CarResponseDto dto = carService.findById(id);
         List<PictureResponseDto> dtos = pictureService.findByCategoryId(dto.getCategory().getId());
 

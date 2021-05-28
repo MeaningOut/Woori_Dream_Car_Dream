@@ -4,6 +4,7 @@ import com.wooridreamcardream.meaningout.dto.car.CarResponseDto;
 import com.wooridreamcardream.meaningout.dto.car.CarWooriResponseDto;
 import com.wooridreamcardream.meaningout.dto.PictureResponseDto;
 import com.wooridreamcardream.meaningout.service.CarService;
+import com.wooridreamcardream.meaningout.dto.car.FlaskRequestDto;
 import com.wooridreamcardream.meaningout.service.FlaskService;
 import com.wooridreamcardream.meaningout.service.PictureService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
@@ -23,12 +25,12 @@ public class CarController {
     private final FlaskService flaskService;
     private final PictureService pictureService;
 
-    @GetMapping("/car/dream")
-    public String dream(@RequestParam("user-income") String user_income, @RequestParam("min") BigDecimal minimum, @RequestParam("max") BigDecimal maximum, @RequestParam("people") int people, @RequestParam("body-type") String body_type,
-                        @RequestParam("e") String environmental_protection,
-                        @RequestParam("f") String fuel_economy, @RequestParam("b") String boycott_in_japan,
-                        @RequestParam("p") String patriotic_campaign, @RequestParam("v") String vegan, Model model) {
-        List<CarWooriResponseDto> dto = carService.dream(user_income, minimum, maximum, people, body_type, environmental_protection, fuel_economy, boycott_in_japan, patriotic_campaign, vegan);
+    @PostMapping("/car/dream")
+    public String dream(@RequestParam("user-income") String user_income, @RequestParam("min") BigDecimal minimum, @RequestParam("max") BigDecimal maximum, @RequestParam("people") int people, @RequestParam("body-type") String bodyType,
+                        @RequestParam("environmental-protection") String environmentalProtection,
+                        @RequestParam("fuel-economy") String fuelEconomy, @RequestParam("boycott-in-japan") String boycottInJapan,
+                        @RequestParam("patriotic-campaign") String patrioticCampaign, @RequestParam("vegan") String vegan, Model model) {
+        List<CarWooriResponseDto> dto = carService.dream(user_income, minimum, maximum, new FlaskRequestDto(people, bodyType, environmentalProtection, fuelEconomy, boycottInJapan, patrioticCampaign, vegan));
 
         model.addAttribute("cars", dto);
 

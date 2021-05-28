@@ -192,7 +192,35 @@ function recommendFunction(income, minimum, maximum, people, type) {
             dictObject[checked_list[i]] = 'Y';
         }
         // 다음창으로 넘어감
-        location.href = 'car/dream?user-income=' + income + '&min=' + minimum +'&max=' + maximum + '&people=' + people + '&body-type=' + type + '&e=' + dictObject['e-protection'] + '&f=' + dictObject['fuel-efficiency'] + '&b=' + dictObject['boycott-in-japan'] + '&p=' + dictObject['patriotic'] + '&v=' + dictObject['vegan'];
+        // location.href = 'car/dream?user-income=' + income + '&min=' + minimum +'&max=' + maximum + '&people=' + people + '&body-type=' + type + '&e=' + dictObject['e-protection'] + '&f=' + dictObject['fuel-efficiency'] + '&b=' + dictObject['boycott-in-japan'] + '&p=' + dictObject['patriotic'] + '&v=' + dictObject['vegan'];
+
+        var form = document.createElement("form");
+        var parm = new Array();
+        var input = new Array();
+
+        form.action = "car/dream";
+        form.method = "post";
+
+        parm.push(['user-income', income]);
+        parm.push(['min', minimum]);
+        parm.push(['max', maximum]);
+        parm.push(['people', people]);
+        parm.push(['body-type', type]);
+        parm.push(['environmental-protection', dictObject['e-protection']]);
+        parm.push(['fuel-economy', dictObject['fuel-efficiency']]);
+        parm.push(['boycott-in-japan', dictObject['boycott-in-japan']]);
+        parm.push(['patriotic-campaign', dictObject['patriotic']]);
+        parm.push(['vegan', dictObject['vegan']]);
+
+        for (var i = 0; i < parm.length; i++) {
+            input[i] = document.createElement("input");
+            input[i].setAttribute("type", "hidden");
+            input[i].setAttribute("name", parm[i][0]);
+            input[i].setAttribute("value", parm[i][1]);
+            form.appendChild(input[i]);
+        }
+        document.body.appendChild(form);
+        form.submit();
     } else {
         alert("2개 또는 3개만 선택하세요");
     }

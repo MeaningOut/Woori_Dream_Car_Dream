@@ -22,7 +22,7 @@ public class Company {
     @Column(name="name", nullable=false, unique = true)
     private String name;
 
-    @Column(name="logo", nullable=false)
+    @Column(name="logo")
     private String logo; // 회사 로고 image url
 
     @OneToMany(mappedBy = "company")

@@ -18,4 +18,10 @@ public class CompanyService {
         Company company = companyRepository.findByName(name).orElseThrow(() -> new IllegalArgumentException("해당 회사가 없습니다. company = " + name));
         return new CompanyResponseDto(company);
     }
+
+    @Transactional
+    public CompanyResponseDto findById(Long id) {
+        Company company = companyRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 회사가 없습니다. company = " + id));
+        return new CompanyResponseDto(company);
+    }
 }

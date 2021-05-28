@@ -173,7 +173,7 @@ function continueFunction() {
 
     // 외형
     // console.log("외형 : ", car_body);
-    location.href = 'sub?user-income=' + yearIncome + '&min=' + minLimit + '&max=' + maxLimit +'&people=' + person + '&body-type=' + car_body;
+    location.href = 'taste?user-income=' + yearIncome + '&min=' + minLimit + '&max=' + maxLimit +'&people=' + person + '&body-type=' + car_body;
 }
 
 
@@ -191,8 +191,6 @@ function recommendFunction(income, minimum, maximum, people, type) {
         for (var i = 0; i < checked_list.length; i++){
             dictObject[checked_list[i]] = 'Y';
         }
-        // 다음창으로 넘어감
-        // location.href = 'car/recommend?user-income=' + income + '&min=' + minimum +'&max=' + maximum + '&people=' + people + '&body-type=' + type + '&e=' + dictObject['e-protection'] + '&f=' + dictObject['fuel-efficiency'] + '&b=' + dictObject['boycott-in-japan'] + '&p=' + dictObject['patriotic'] + '&v=' + dictObject['vegan'];
 
         var form = document.createElement("form");
         var parm = new Array();

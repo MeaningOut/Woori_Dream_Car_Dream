@@ -101,12 +101,22 @@ public class CarService {
             System.out.println(a);
         }
 
-        Map<Long, BigDecimal> loanData = checkedValidLoanData(response, minimum, maximum);
+        Map<Long, BigDecimal> loanData = checkedValidCar(response, minimum, maximum);
 
         return getValidCarDetails(loanData);
     }
 
-    public Map<Long, BigDecimal> checkedValidLoanData(List<Map<Long, String>> cars, BigDecimal minimum, BigDecimal maximum) {
+    /**
+     *
+     * 우리은행 API 응답값을 읽어서 대출 한도 금액 (LN_AVL_AM)을 찾는다.
+     * 대출 한도 금액이 사용자 대출 한도 범위 내에 있는 자동차의 자동차 id를 반환한다.
+     *
+     * @param cars 자동차 별 우리은행 API 응답값 (Long: 자동차 id, String: API 응답값)
+     * @param minimum 사용자 대출 한도 범위 (최소)
+     * @param maximum 사용자 대출 한도 범위 (최대)
+     * @return
+     */
+    public Map<Long, BigDecimal> checkedValidCar(List<Map<Long, String>> cars, BigDecimal minimum, BigDecimal maximum) {
         Map<Long, BigDecimal> loanData = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         for (Map<Long, String> object: cars) {
@@ -132,17 +142,25 @@ public class CarService {
         return loanData;
     }
 
-    public List<Long> checkedValidCarIds(Map<Long, BigDecimal> cars) {
-        return new ArrayList<Long>(cars.keySet());
+    public List<Long> checkedValidCarId(Map<Long, BigDecimal> cars) {
+        return new ArrayList<>(cars.keySet());
     }
 
+    /**
+     *
+     * 사용자 취향과 대출 한도 범위 내에 있는 자동차 id의 세부 정보를 가지고 온다.
+     * 자동차 회사의 logo 이미지를 가지고 오기 위해 모든 CompanyService의 findByName을 사용했습니다.
+     *
+     * @param cars 자동차 id와 대출 한도 금액
+     * @return
+     */
     public List<CarWooriResponseDto> getValidCarDetails(Map<Long, BigDecimal> cars) {
-        List<CarResponseDto> carInIds = findByIdIn(checkedValidCarIds(cars));
+        List<CarResponseDto> carList = findByIdIn(checkedValidCarId(cars));
         List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
 
-        for (CarResponseDto carResponseDto: carInIds) {
-            CompanyResponseDto companyResponseDto = companyService.findByName(carResponseDto.getCompany().getName());
-            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, cars.get(carResponseDto.getId()), companyResponseDto.getLogo()));
+        for (CarResponseDto carResponseDto: carList) {
+            CompanyResponseDto companyResponseDto = companyService.findById(carResponseDto.getCompany().getId());
+            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, cars.get(carResponseDto.getId())));
         }
         return carWooriResponseDtos;
     }

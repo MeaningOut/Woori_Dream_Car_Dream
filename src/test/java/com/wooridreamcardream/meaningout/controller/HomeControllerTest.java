@@ -24,18 +24,18 @@ public class HomeControllerTest {
     }
 
     @Test
-    public void home_페이지_로딩() {
+    public void type_페이지_로딩() {
         //when
-        String body = this.restTemplate.getForObject("/home", String.class);
+        String body = this.restTemplate.getForObject("/type", String.class);
 
         //then
         assertThat(body).contains("연소득과 대출한도는 꼭 선택해주세요!");
     }
 
     @Test
-    public void sub_페이지_로딩() {
+    public void taste_페이지_로딩() {
         //when
-        String body = this.restTemplate.getForObject("/sub", String.class);
+        String body = this.restTemplate.getForObject("/taste", String.class);
 
         //then
         assertThat(body).contains("어떤 소비신념을 가지셨나요?");

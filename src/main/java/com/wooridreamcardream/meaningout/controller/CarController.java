@@ -23,8 +23,9 @@ public class CarController {
     private final CarService carService;
     private final PictureService pictureService;
 
-
     /**
+     *
+     * 연 소득, 대출 한도 범위, 차량 인승 등등 사용자의 자동차 취향을 알 수 있는 정보로 사용자 맞춤 자동차 목록을 가지고 와서 화면에 표시한다.
      *
      * @param user_income 사용자 연 소득
      * @param minimum 사용자 대출 한도 범위 (최소)
@@ -60,6 +61,15 @@ public class CarController {
         return "car";
     }
 
+    /**
+     *
+     * 자동차의 세부 정보를 볼 수 있다.
+     * 자동차 id를 이용해서 자동차의 정보를 가지고 온다.
+     *
+     * @param id 자동차 id
+     * @param model
+     * @return
+     */
     @GetMapping("/car/{id}/picture")
     public String details(@PathVariable Long id, Model model) {
         CarResponseDto dto = carService.findById(id);

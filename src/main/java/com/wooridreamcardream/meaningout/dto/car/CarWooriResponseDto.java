@@ -25,9 +25,8 @@ public class CarWooriResponseDto {
     private String gearShift;
     private String imageUrl;
     private BigDecimal loanLimit;
-    private String logoImageUrl;
 
-    public CarWooriResponseDto(CarResponseDto entity, BigDecimal loanLimit, String logoImageUrl) {
+    public CarWooriResponseDto(CarResponseDto entity, BigDecimal loanLimit) {
         this.id = entity.getId();
         this.category = entity.getCategory();
         this.name = entity.getName();
@@ -45,7 +44,6 @@ public class CarWooriResponseDto {
         this.gearShift = entity.getGearShift();
         this.imageUrl = entity.getImageUrl();
         this.loanLimit = loanLimit;
-        this.logoImageUrl = logoImageUrl;
     }
 
     @Override
@@ -67,8 +65,7 @@ public class CarWooriResponseDto {
                 ", driveType='" + driveType + '\'' +
                 ", gearShift='" + gearShift + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", loanLimit=" + loanLimit +
-                ", logoImageUrl='" + logoImageUrl + '\'' +
+                ", loanLimit='" + loanLimit + '\'' +
                 '}';
     }
 }

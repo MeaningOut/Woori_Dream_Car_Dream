@@ -20,13 +20,13 @@ public class HomeController {
         return "index";
     }
 
-    @GetMapping("/home")
-    public String home() {
-        return "home";
+    @GetMapping("/type")
+    public String type() {
+        return "type";
     }
 
-    @GetMapping("/sub")
-    public String sub(@RequestParam("user-income") String user_income,
+    @GetMapping("/taste")
+    public String taste(@RequestParam("user-income") String user_income,
                       @RequestParam("min") BigDecimal minimum,
                       @RequestParam("max") BigDecimal maximum,
                       @RequestParam("people") int people,
@@ -36,6 +36,6 @@ public class HomeController {
         model.addAttribute("maximum", maximum);
         model.addAttribute("people", people);
         model.addAttribute("bodyType", body_type);
-        return "sub";
+        return "taste";
     }
 }

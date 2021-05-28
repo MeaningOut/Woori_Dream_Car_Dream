@@ -13,18 +13,8 @@ import com.wooridreamcardream.meaningout.repository.CarRepository;
 import com.wooridreamcardream.meaningout.repository.CategoryRepository;
 import com.wooridreamcardream.meaningout.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.Disposable;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
-import static org.springframework.web.reactive.function.BodyInserters.*;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -37,6 +27,10 @@ public class CarService {
     private final CategoryRepository categoryRepository;
     private final CompanyRepository companyRepository;
 
+    private final FlaskService flaskService;
+    private final WooriHttpService wooriHttpService;
+    private final CompanyService companyService;
+
     @Transactional
     public List<CarResponseDto> findAll() {
         return carRepository.findAll().stream().map(CarResponseDto::new).collect(Collectors.toList());
@@ -46,6 +40,11 @@ public class CarService {
     public CarResponseDto findById(Long id) {
         Car entity = carRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 자동차가 없습니다. id = " + id));
         return new CarResponseDto(entity);
+    }
+
+    @Transactional
+    public List<CarResponseDto> findByIdIn(List<Long> ids) {
+        return carRepository.findByIdIn(ids).stream().map(CarResponseDto::new).collect(Collectors.toList());
     }
 
     @Transactional
@@ -61,148 +60,69 @@ public class CarService {
                 .orElseGet(() -> carRepository.save(carSaveRequestDto.toEntity(category, company)));
         return car.getId();
     }
+
     @Transactional
-    public List<CarWooriResponseDto> dream(String userIncome, BigDecimal minimum, BigDecimal maximum, int people, String bodyType, String environmentalProtection, String fuelEconomy, String boycottInJapan, String patrioticCampaign, String vegan) {
-
-        // 추천 시스템 요청 부분
-        String url = "http://127.0.0.1:5000";
-        WebClient webClient = WebClient.builder().baseUrl(url).build();
-
-        // 추천 시스템
-        Mono<CarPythonResponseDto[]> response = webClient.post()
-                        .uri("/refined-cars")
-                        .body(fromFormData("people", String.valueOf(people))
-                                .with("body-type", bodyType)
-                                .with("environmental-protection", environmentalProtection)
-                                .with("fuel-economy",fuelEconomy)
-                                .with("boycott-in-japan", boycottInJapan)
-                                .with("patriotic-campaign", patrioticCampaign)
-                                .with("vegan", vegan))
-                        .retrieve()
-                        .bodyToMono(CarPythonResponseDto[].class);
-
-        // 추천 시스템 json 처리
-        // 1. json to list, CarPythonResponseDto
-        CarPythonResponseDto[] list = response.block();
-        for (CarPythonResponseDto dto: list) {
+    public List<CarWooriResponseDto> dream(String userIncome, BigDecimal minimum, BigDecimal maximum, FlaskRequestDto data) {
+        // 추천 시스템 요청
+        CarPythonResponseDto[] list = flaskService.recommendedCars(data).block();
+        for (CarPythonResponseDto dto : list) {
             System.out.println(dto);
         }
+
+        List<CarWooriRequestDto> requestDtos = new ArrayList<>();
+        Map<Long, String> similarityData = new HashMap<>();
+        for (CarPythonResponseDto dto : list) {
+            requestDtos.add(CarWooriRequestDto.builder()
+                    .carId(Long.valueOf(dto.getId()))
+                    .dataBody(RequestDataBody.builder()
+                            .DBPE_ANL_ICM_AM(userIncome)
+                            .CAR_PR(dto.getAvg_price())
+                            .build())
+                    .build());
+            similarityData.put(Long.valueOf(dto.getId()), dto.getSimilarity());
+        }
+
+        List<Map<Long, String>> response = wooriHttpService.request(requestDtos);
+        for (Map<Long, String> a : response) {
+            System.out.println(a);
+        }
+//        List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
+//        return carWooriResponseDtos;
+        // 여기까지
+//
+        List<Long> possible_ids = new ArrayList<>();
+        Map<Long, BigDecimal> loanData = new HashMap<>();
+        ObjectMapper mapper = new ObjectMapper();
+        for (Map<Long, String> object: response) {
+
+            object.forEach((key, value)->
+            {
+                try {
+                    Map<String, Object> m_ap = new HashMap<>();
+                    m_ap = mapper.readValue(value, new TypeReference<Map<String, Object>>(){});
+                    Map<String, String> m__ap = mapper.convertValue(m_ap.get("dataBody"), Map.class);
+
+//                  API로부터 반환받은 대출 한도 금액(LN_AVL_AM)이 사용자가 입력한 대출 범위에 있는지 확인
+                    BigDecimal LN_AVL_AM = new BigDecimal(m__ap.get("LN_AVL_AM"));
+                    if (LN_AVL_AM.compareTo(minimum) > 0 && LN_AVL_AM.compareTo(maximum) < 0) {
+//                      범위에 들어가면 possible_ids에 추가
+                        possible_ids.add(key);
+                        loanData.put(key, LN_AVL_AM);
+                    }
+
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        List<CarResponseDto> carInIds = findByIdIn(possible_ids);
         List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
 
+        for (CarResponseDto carResponseDto: carInIds) {
+            CompanyResponseDto companyResponseDto = companyService.findByName(carResponseDto.getCompany().getName());
+            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, similarityData.get(carResponseDto.getId()), loanData.get(carResponseDto.getId()), companyResponseDto.getLogo()));
+        }
         return carWooriResponseDtos;
-//        // 여기까지
-//
-//        // 2. CarPythonResponseDto to CarWooriRequestDto
-//        List<CarWooriRequestDto> requestDtos = new ArrayList<>();
-//        Map<Long, String> similarityData = new HashMap<>();
-//        for (CarPythonResponseDto dto: list) {
-//            requestDtos.add(new CarWooriRequestDto(Long.valueOf(dto.getId()), new RequestDataBody(userIncome, dto.getAvg_price())));
-//            similarityData.put(Long.valueOf(dto.getId()), dto.getSimilarity());
-//        }
-//
-//        // 한도 범위 검사 open api
-//        final List<Map<Long, String>>[] strs = new List[]{new ArrayList<>()};
-//
-//        Disposable dispose = Flux.fromIterable(requestDtos)
-//                .concatMap( // 객체 순서 보장
-//                    arg -> {
-//                        Mono<Map<Long, String>> result = wooriApi(arg).map(count -> {
-//                                    Map<Long, String> item = new HashMap<>();
-//                                    item.put(arg.getCarId(), count);
-//                                    return item;
-//                                });
-//                        return result;
-//                })
-//                .collectList()
-//                .subscribe((data) -> {
-//                    strs[0] = data;});
-//
-//        while (true){
-//            if (dispose.isDisposed()) {
-//                System.out.println(strs[0]);
-//                break;
-//            }
-//            else {
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//
-//        List<Map<Long, String>> objects = strs[0];
-//        List<Long> possible_ids = new ArrayList<>();
-//        Map<Long, BigDecimal> loanData = new HashMap<>();
-//        ObjectMapper mapper = new ObjectMapper();
-//        for (Map<Long, String> object: objects) {
-//
-//            object.forEach((key, value)->
-//            {
-//                try {
-//                    Map<String, Object> m_ap = new HashMap<>();
-//                    m_ap = mapper.readValue(value, new TypeReference<Map<String, Object>>(){});
-//                    Map<String, String> m__ap = mapper.convertValue(m_ap.get("dataBody"), Map.class);
-//
-////                  API로부터 반환받은 대출 한도 금액(LN_AVL_AM)이 사용자가 입력한 대출 범위에 있는지 확인
-//                    BigDecimal LN_AVL_AM = new BigDecimal(m__ap.get("LN_AVL_AM"));
-//                    if (LN_AVL_AM.compareTo(minimum) > 0 && LN_AVL_AM.compareTo(maximum) < 0) {
-////                      범위에 들어가면 possible_ids에 추가
-//                        possible_ids.add(key);
-//                        loanData.put(key, LN_AVL_AM);
-//                    }
-//
-//                } catch (JsonProcessingException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//        }
-//
-//        List<CarResponseDto> carInIds = carRepository.findByIdIn(possible_ids).stream().map(CarResponseDto::new).collect(Collectors.toList());
-//        List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();
-//
-//        for (CarResponseDto carResponseDto: carInIds) {
-//            Company company = companyRepository.findByName(carResponseDto.getCompany().getName()).orElseThrow(() -> new IllegalArgumentException("해당 북마크가 없습니다. company = " + carResponseDto.getCompany()));
-//            carWooriResponseDtos.add(new CarWooriResponseDto(carResponseDto, similarityData.get(carResponseDto.getId()), loanData.get(carResponseDto.getId()), company.getLogo()));
-//        }
-//        return carWooriResponseDtos;
-    }
-
-    public Mono<String> wooriApi(CarWooriRequestDto requestDto) {
-        String url = "https://openapi.wooribank.com:444";
-        WebClient webClient = WebClient.builder().baseUrl(url).build();
-        String body = "{\n" +
-        "  \"dataHeader\": {\n" +
-        "    \"UTZPE_CNCT_IPAD\": \"\",\n" +
-        "    \"UTZPE_CNCT_MCHR_UNQ_ID\": \"\",\n" +
-        "    \"UTZPE_CNCT_TEL_NO_TXT\": \"\",\n" +
-        "    \"UTZPE_CNCT_MCHR_IDF_SRNO\": \"\",\n" +
-        "    \"UTZ_MCHR_OS_DSCD\": \"\",\n" +
-        "    \"UTZ_MCHR_OS_VER_NM\": \"\",\n" +
-        "    \"UTZ_MCHR_MDL_NM\": \"\",\n" +
-        "    \"UTZ_MCHR_APP_VER_NM\": \"\"\n" +
-        "  },\n" +
-        "  \"dataBody\": {\n" +
-        "    \"DBPE_ANL_ICM_AM\": \"" + requestDto.getDataBody().getDBPE_ANL_ICM_AM()+ "\",\n" +
-        "    \"GRN_NCAR_YN\": \"Y\",\n" +
-        "    \"CAR_PR\": \"" + requestDto.getDataBody().getCAR_PR() +"\",\n" +
-        "    \"CRINF_INQ_AGR_YN\": \"Y\",\n" +
-        "    \"INF_OFR_MND_AGR_YN\": \"Y\",\n" +
-        "    \"GAT_UTZ_MND_AGR_YN\": \"Y\",\n" +
-        "    \"CUS_IDF_INF_AGR_YN\": \"Y\",\n" +
-        "    \"INF_OFR_CHC_AGR_YN\": \"Y\",\n" +
-        "    \"GAT_UTZ_CHC_AGR_YN\": \"Y\"\n" +
-        "  }\n" +
-        "}";
-
-        return webClient.post()
-                .uri("/oai/wb/v1/newcar/getNewCarLoanAm")
-                .contentType(MediaType.APPLICATION_JSON)
-                .headers(headers -> {
-                    headers.add("appkey", "l7xxDPvgxEKY9hmvslvoN4Hj3IaJ3REkmqXD");
-                })
-                .body(BodyInserters.fromValue(body))
-                .retrieve()
-                .bodyToMono(String.class);
     }
 }

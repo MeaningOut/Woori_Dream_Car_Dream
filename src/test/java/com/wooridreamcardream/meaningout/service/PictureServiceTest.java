@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.*;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class PictureServiceTest {
     @InjectMocks
     private PictureService pictureService;
@@ -40,6 +40,7 @@ public class PictureServiceTest {
         ReflectionTestUtils.setField(picture, "id", fakePictureId);
 
         // mocking
+//        given(categoryRepository.save(any())).willReturn()
         given(pictureRepository.save(any())).willReturn(picture);
         given(pictureRepository.findById(fakePictureId)).willReturn(Optional.ofNullable(picture));
 
@@ -55,15 +56,14 @@ public class PictureServiceTest {
     }
 
     private Picture createPictureEntity(PictureSaveRequestDto dto) {
-        Category category = new Category(1L, "Hyundai IONIQ 5");
-        return new Picture(1L, category, dto.getImageUrl());
-//        return Picture.builder()
-//                .category(new Category(dto.getName()))
-//                .imageUrl(dto.getImageUrl())
-//                .build();
+//        Category category = new Category(1L, "Hyundai IONIQ 5");
+//        return new Picture(1L, category, dto.getImageUrl());
+        return Picture.builder()
+                .category(new Category(dto.getCategoryName()))
+                .imageUrl(dto.getImageUrl())
+                .build();
     }
 
-//    @Asy
     private PictureSaveRequestDto createPictureRequest() {
         PictureSaveRequestDto dto = PictureSaveRequestDto.builder()
                 .categoryName("Hyundai IONIQ 5")

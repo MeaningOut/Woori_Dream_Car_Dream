@@ -7,11 +7,12 @@ https://youtu.be/KcUvs8I4H-I
 # 기술
 Spring Boot
 
-# 서버 구조
-![img.png](img.png)
+# 서버 구조 및 기능 흐름도
+![image](https://user-images.githubusercontent.com/53392870/120098792-d17d1480-c172-11eb-9dd3-fabae2414d0d.png)
 
-# 추천 기능 흐름도
-![image](https://user-images.githubusercontent.com/53392870/117311735-6d429a00-aebf-11eb-9f81-03e582a9e7e8.png)
+
+# DB ERD
+![image](https://user-images.githubusercontent.com/53392870/120098752-ab577480-c172-11eb-9203-11517e7e205f.png)
 
 # 화면 구성
 ### 시작화면

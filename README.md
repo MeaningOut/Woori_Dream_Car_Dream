@@ -12,7 +12,12 @@ Spring Boot
 
 # Server Architecture & Feature Flow
 
-![image](https://user-images.githubusercontent.com/53392870/120098792-d17d1480-c172-11eb-9dd3-fabae2414d0d.png)
+sequenceDiagram
+participant User as 사용자
+participant SpringBoot as Spring Boot 서버
+participant Flask as Flask 자동차 추천 시스템 서버
+participant WooriBank as 우리은행 신차대출조회 API
+participant MySQL as MySQL
 
 # Database ERD
 

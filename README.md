@@ -11,13 +11,23 @@ Woori Hackathon Spring Boot Server
 Spring Boot
 
 # Server Architecture & Feature Flow
-
+```mermaid
 sequenceDiagram
-participant User as 사용자
-participant SpringBoot as Spring Boot 서버
-participant Flask as Flask 자동차 추천 시스템 서버
-participant WooriBank as 우리은행 신차대출조회 API
-participant MySQL as MySQL
+    participant User as User
+    participant SpringBoot as Spring Boot
+    participant Flask as Flask
+    participant WooriBank as New Car Loan Inquiry API
+    participant MySQL as MySQL
+
+    User ->> SpringBoot: ① Enter income, loan limit, spending beliefs, and request car recommendations
+    SpringBoot ->> Flask: ② Request car recommendations based on spending beliefs
+    Flask -->> SpringBoot: ③ Return recommended car list
+    SpringBoot ->> WooriBank: ④ Request car loan limit using user income and car price
+    WooriBank -->> SpringBoot: ⑤ Return user-specific loan limit for the car
+    SpringBoot ->> MySQL: ⑥ Request car details (name, price, image) for cars within loan limit
+    MySQL -->> SpringBoot: ⑦ Return car details (name, price, image)
+    SpringBoot -->> User: ⑧ Return list of cars within the user's loan limit
+```
 
 # Database ERD
 

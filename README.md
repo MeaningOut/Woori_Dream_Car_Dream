@@ -8,7 +8,7 @@ Woori Hackathon Spring Boot Server
 
 # Technology
 
-Spring Boot
+Spring Boot, Spring Webflux, MySQL
 
 # Server Architecture & Feature Flow
 ```mermaid

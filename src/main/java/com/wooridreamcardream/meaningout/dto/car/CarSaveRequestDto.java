@@ -3,7 +3,6 @@ package com.wooridreamcardream.meaningout.dto.car;
 import com.wooridreamcardream.meaningout.domain.Car;
 import com.wooridreamcardream.meaningout.domain.Category;
 import com.wooridreamcardream.meaningout.domain.Company;
-import com.wooridreamcardream.meaningout.repository.CategoryRepository;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

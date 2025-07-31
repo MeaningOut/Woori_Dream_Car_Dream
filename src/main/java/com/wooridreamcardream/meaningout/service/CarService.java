@@ -2,7 +2,6 @@ package com.wooridreamcardream.meaningout.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wooridreamcardream.meaningout.domain.Car;
 import com.wooridreamcardream.meaningout.domain.Category;
@@ -37,18 +36,16 @@ public class CarService {
      * 데이터 (아이디, 모델 명, 세부 명, 차 가격(최소), 차 가격(최대), 회사 명, 엔진 형식, 배기량, 연비(등급), 승차인원, 구동방식, 변속기)
      * @return
      */
-    @Transactional
+
     public List<CarResponseDto> findAll() {
         return carRepository.findAll().stream().map(CarResponseDto::new).collect(Collectors.toList());
     }
 
-    @Transactional
     public CarResponseDto findById(Long id) {
         Car entity = carRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 자동차가 없습니다. id = " + id));
         return new CarResponseDto(entity);
     }
 
-    @Transactional
     public List<CarResponseDto> findByIdIn(List<Long> ids) {
         return carRepository.findByIdIn(ids).stream().map(CarResponseDto::new).collect(Collectors.toList());
     }
@@ -90,7 +87,7 @@ public class CarService {
      * @param data 소비신념 (추천 시스템 요청 시 필요)
      * @return
      */
-    @Transactional
+
     public List<CarWooriResponseDto> recommend(String userIncome, BigDecimal minimum, BigDecimal maximum, FlaskRequestDto data) {
         // 추천 시스템 요청
         CarPythonResponseDto[] list = flaskService.recommendedCars(data).block();

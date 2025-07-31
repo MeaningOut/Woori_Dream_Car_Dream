@@ -16,17 +16,16 @@ import java.util.Map;
 
 @Service
 public class WooriHttpService {
-
     static final String HEADER_VALUE = "l7xxDPvgxEKY9hmvslvoN4Hj3IaJ3REkmqXD";
     static final String appKey = "appkey";
     static final String url = "/oai/wb/v1/newcar/getNewCarLoanAm";
     static final int wooriList = 0;
-    static final String flaskURL = "http://127.0.0.1:5000";
+    static final String BASE_URL = "http://127.0.0.1:5000";
 
     private final WebClient webClient;
 
     public WooriHttpService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl(flaskURL).build();
+        this.webClient = webClientBuilder.baseUrl(BASE_URL).build();
     }
 
     /**

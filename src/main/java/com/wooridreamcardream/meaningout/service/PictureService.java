@@ -20,7 +20,6 @@ public class PictureService {
     private final PictureRepository pictureRepository;
     private final CategoryRepository categoryRepository;
 
-    @Transactional
     public List<PictureResponseDto> findByCategoryId(Long categoryId) {
         return pictureRepository.findByCategoryId(categoryId).stream().map(PictureResponseDto::new).collect(Collectors.toList());
     }

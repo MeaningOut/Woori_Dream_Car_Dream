@@ -3,9 +3,6 @@ package com.wooridreamcardream.meaningout.dto.car;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
-import java.beans.ConstructorProperties;
-import java.math.BigDecimal;
-
 @Getter
 public class CarPythonResponseDto {
     private String id;

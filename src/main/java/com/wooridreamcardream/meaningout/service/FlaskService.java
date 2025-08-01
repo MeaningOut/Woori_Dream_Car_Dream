@@ -2,6 +2,7 @@ package com.wooridreamcardream.meaningout.service;
 
 import com.wooridreamcardream.meaningout.dto.car.CarPythonResponseDto;
 import com.wooridreamcardream.meaningout.dto.car.FlaskRequestDto;
+import com.wooridreamcardream.meaningout.exception.FlaskApiException;
 import org.springframework.stereotype.Service;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -38,7 +39,7 @@ public class FlaskService {
                         status -> status.isError(),
                         response -> response.bodyToMono(String.class)
                                 .flatMap(body ->
-                                        Mono.error(new RuntimeException("Flask error: " + body))
+                                        Mono.error(new FlaskApiException("Flask error: " + body))
                                 )
                 )
                 .bodyToMono(CarPythonResponseDto[].class)

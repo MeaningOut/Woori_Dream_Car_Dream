@@ -13,6 +13,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(e.getMessage());
     }
 
+    @ExceptionHandler(WooriJsonSerializationException.class)
+    public ResponseEntity<String> handleFlaskError(WooriJsonSerializationException e) {
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(e.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleDefault(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("UNKNOWN ERROR");

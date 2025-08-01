@@ -31,12 +31,6 @@ public class CarService {
     private final WooriHttpService wooriHttpService;
     private final CompanyService companyService;
 
-    /**
-     * findAll(), findById(Long id), findByIdIn(List<Long> ids) 모두 자동차의 데이터를 가지고 옵니다.
-     * 데이터 (아이디, 모델 명, 세부 명, 차 가격(최소), 차 가격(최대), 회사 명, 엔진 형식, 배기량, 연비(등급), 승차인원, 구동방식, 변속기)
-     * @return
-     */
-
     public List<CarResponseDto> findAll() {
         return carRepository.findAll().stream().map(CarResponseDto::new).collect(Collectors.toList());
     }
@@ -50,15 +44,6 @@ public class CarService {
         return carRepository.findByIdIn(ids).stream().map(CarResponseDto::new).collect(Collectors.toList());
     }
 
-    /**
-     *
-     * 회사와 모델명이 존재하는 지 확인합니다.
-     * 없으면 만듭니다.
-     * 자동차 데이터를 저장합니다.
-     *
-     * @param carSaveRequestDto 저장하고자 하는 자동차 데이터
-     * @return
-     */
     @Transactional
     public Long save(CarSaveRequestDto carSaveRequestDto) {
         Company company = companyRepository.findByName(carSaveRequestDto.getCompanyName())
@@ -73,24 +58,9 @@ public class CarService {
         return car.getId();
     }
 
-    /**
-     *
-     * 1. 플라스크 추천 서버에 사용자 취향 정보 데이터 (소비신념)를 담아서 추천 자동차 요청을 보낸다.
-     * 2. 사용자 연 소득, 추천 자동차 가격을 담아서 우리은행 신차 대출 조회 API 요청을 보낸다.
-     * API 응답값은 자동차에 대한 사용자 대출 한도 금액이다.
-     * 3. API로부터 돌아온 사용자 대출 한도 금액이 사용자가 입력한 대출 한도 범위 (minimum과 maximum 사이)내에 들어가는지 확인한다.
-     * 4. 대출 한도 범위 내 자동차에 대해 회사 로고, 자동차 상세 정보를 데이터베이스로부터 가져온다.
-     *
-     * @param userIncome 사용자 연 소득
-     * @param minimum 사용자 대출 한도 범위 (최소)
-     * @param maximum 사용자 대출 한도 범위 (최대)
-     * @param data 소비신념 (추천 시스템 요청 시 필요)
-     * @return
-     */
-
     public List<CarWooriResponseDto> recommend(String userIncome, BigDecimal minimum, BigDecimal maximum, FlaskRequestDto data) {
         // 추천 시스템 요청
-        CarPythonResponseDto[] list = flaskService.recommendedCars(data).block();
+        CarPythonResponseDto[] list = flaskService.recommendedCars(data);
 
         List<CarWooriRequestDto> requestDtos = new ArrayList<>();
         Map<Long, String> similarityData = new HashMap<>();
@@ -112,16 +82,6 @@ public class CarService {
         return getValidCarDetails(loanData);
     }
 
-    /**
-     *
-     * 우리은행 API 응답값을 읽어서 대출 한도 금액 (LN_AVL_AM)을 찾는다.
-     * 대출 한도 금액이 사용자 대출 한도 범위 내에 있는 자동차의 자동차 id를 반환한다.
-     *
-     * @param cars 자동차 별 우리은행 API 응답값 (Long: 자동차 id, String: API 응답값)
-     * @param minimum 사용자 대출 한도 범위 (최소)
-     * @param maximum 사용자 대출 한도 범위 (최대)
-     * @return
-     */
     public Map<Long, BigDecimal> checkedValidCar(List<Map<Long, String>> cars, BigDecimal minimum, BigDecimal maximum) {
         Map<Long, BigDecimal> loanData = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
@@ -150,25 +110,10 @@ public class CarService {
         return loanData;
     }
 
-    /**
-     *
-     * 자동차 id만 반환합니다.
-     *
-     * @param cars 자동차 별 우리은행 API 응답값 (Long: 자동차 id, String: API 응답값)
-     * @return
-     */
     public List<Long> checkedValidCarId(Map<Long, BigDecimal> cars) {
         return new ArrayList<>(cars.keySet());
     }
 
-    /**
-     *
-     * 사용자 취향과 대출 한도 범위 내에 있는 자동차 id의 세부 정보를 가지고 온다.
-     * 자동차 회사의 logo 이미지를 가지고 오기 위해 모든 CompanyService의 findByName을 사용했습니다.
-     *
-     * @param cars 자동차 id와 대출 한도 금액
-     * @return
-     */
     public List<CarWooriResponseDto> getValidCarDetails(Map<Long, BigDecimal> cars) {
         List<CarResponseDto> carList = findByIdIn(checkedValidCarId(cars));
         List<CarWooriResponseDto> carWooriResponseDtos = new ArrayList<>();

@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+
 import static org.springframework.web.reactive.function.BodyInserters.*;
 
 @Service
@@ -20,7 +22,7 @@ public class FlaskService {
         this.webClient = webClientBuilder.baseUrl(FLASK_URL).build();
     }
 
-    public Mono<CarPythonResponseDto[]> recommendedCars(FlaskRequestDto dto) {
+    public CarPythonResponseDto[] recommendedCars(FlaskRequestDto dto) {
         return webClient.post()
                 .uri(URL)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -32,6 +34,15 @@ public class FlaskService {
                         .with("patriotic-campaign", dto.getPatrioticCampaign())
                         .with("vegan", dto.getVegan()))
                 .retrieve()
-                .bodyToMono(CarPythonResponseDto[].class);
+                .onStatus(
+                        status -> status.isError(),
+                        response -> response.bodyToMono(String.class)
+                                .flatMap(body ->
+                                        Mono.error(new RuntimeException("Flask error: " + body))
+                                )
+                )
+                .bodyToMono(CarPythonResponseDto[].class)
+                .timeout(Duration.ofSeconds(3))
+                .block();
     }
 }

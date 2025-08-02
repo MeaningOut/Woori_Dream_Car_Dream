@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
+@RequestMapping("/car")
 @Controller
 public class CarController {
     private final CarService carService;
     private final PictureService pictureService;
 
-    @PostMapping("/car/recommend")
+    @PostMapping("/recommend")
     public String recommendCar(@ModelAttribute RecommendCarRequestDto requestDto, Model model) {
         List<CarWooriResponseDto> recommendedCars = carService.recommend(
                 requestDto.getUserIncome(),
@@ -32,7 +33,7 @@ public class CarController {
         return "car";
     }
 
-    @GetMapping("/car/{id}/picture")
+    @GetMapping("/{id}/picture")
     public String getCarDetails(@PathVariable Long id, Model model) {
         CarResponseDto dto = carService.findById(id);
         List<PictureResponseDto> pictures = pictureService.findByCategoryId(dto.getCategory().getId());

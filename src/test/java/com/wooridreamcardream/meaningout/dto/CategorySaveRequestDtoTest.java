@@ -11,6 +11,6 @@ public class CategorySaveRequestDtoTest {
         //when
         CategorySaveRequestDto dto = new CategorySaveRequestDto(name);
         //then
-        assertThat(dto.getName()).isEqualTo(name);
+        assertThat(dto.name()).isEqualTo(name);
     }
 }

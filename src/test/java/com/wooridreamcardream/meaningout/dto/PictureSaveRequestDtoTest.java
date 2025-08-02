@@ -13,7 +13,7 @@ public class PictureSaveRequestDtoTest {
         //when
         PictureSaveRequestDto dto = new PictureSaveRequestDto(name, imageUrl);
         //then
-        assertThat(dto.getCategoryName()).isEqualTo(name);
-        assertThat(dto.getImageUrl()).isEqualTo(imageUrl);
+        assertThat(dto.categoryName()).isEqualTo(name);
+        assertThat(dto.imageUrl()).isEqualTo(imageUrl);
     }
 }

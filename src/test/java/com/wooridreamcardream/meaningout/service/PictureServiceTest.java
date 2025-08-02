@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -59,8 +58,8 @@ public class PictureServiceTest {
 //        Category category = new Category(1L, "Hyundai IONIQ 5");
 //        return new Picture(1L, category, dto.getImageUrl());
         return Picture.builder()
-                .category(new Category(dto.getCategoryName()))
-                .imageUrl(dto.getImageUrl())
+                .category(new Category(dto.categoryName()))
+                .imageUrl(dto.imageUrl())
                 .build();
     }
 

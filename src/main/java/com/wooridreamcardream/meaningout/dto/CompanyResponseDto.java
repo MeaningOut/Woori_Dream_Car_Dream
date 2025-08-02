@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 public class CompanyResponseDto {
-    private Long id;
-    private String name;
-    private String logo;
+    private final Long id;
+    private final String name;
+    private final String logo;
 
     public CompanyResponseDto(Company company) {
         this.id = company.getId();

@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class PictureResponseDto {
-    private Long id;
-    private String imageUrl;
+    private final Long id;
+    private final String imageUrl;
 
     public PictureResponseDto(Picture entity) {
         this.id = entity.getId();

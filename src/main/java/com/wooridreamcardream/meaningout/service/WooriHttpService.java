@@ -51,13 +51,13 @@ public class WooriHttpService {
             try {
                 String res = readyToWooriApi(dto).block(Duration.ofSeconds(5));
                 Map<Long, String> resultMap = new HashMap<>();
-                resultMap.put(dto.getCarId(), res);
+                resultMap.put(dto.carId(), res);
                 response.add(resultMap);
             } catch (Exception e) {
                 log.error("Woori API CALL FAIL: " + e.getMessage());
 
                 Map<Long, String> fail = new HashMap<>();
-                fail.put(dto.getCarId(), "FAIL: " + e.getMessage());
+                fail.put(dto.carId(), "FAIL: " + e.getMessage());
                 response.add(fail);
             }
         }
@@ -67,8 +67,8 @@ public class WooriHttpService {
 
     private String makeBody(CarWooriRequestDto dto) {
         WooriRequest.DataBody dataBody = new WooriRequest.DataBody();
-        dataBody.setDBPE_ANL_ICM_AM(dto.getDataBody().getDBPE_ANL_ICM_AM());
-        dataBody.setCAR_PR(dto.getDataBody().getCAR_PR());
+        dataBody.setDBPE_ANL_ICM_AM(dto.dataBody().getDBPE_ANL_ICM_AM());
+        dataBody.setCAR_PR(dto.dataBody().getCAR_PR());
 
         WooriRequest body = new WooriRequest(new WooriRequest.DataHeader(), dataBody);
 

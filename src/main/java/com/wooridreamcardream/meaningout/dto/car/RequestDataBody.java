@@ -2,23 +2,12 @@ package com.wooridreamcardream.meaningout.dto.car;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
+@Builder
 @Getter
+@ToString
 public class RequestDataBody {
-    private String DBPE_ANL_ICM_AM;
-    private String CAR_PR;
-
-    @Builder
-    public RequestDataBody(String DBPE_ANL_ICM_AM, String CAR_PR) {
-        this.DBPE_ANL_ICM_AM = DBPE_ANL_ICM_AM;
-        this.CAR_PR = CAR_PR;
-    }
-
-    @Override
-    public String toString() {
-        return "RequestDataBody{" +
-                "DBPE_ANL_ICM_AM='" + DBPE_ANL_ICM_AM + '\'' +
-                ", CAR_PR='" + CAR_PR + '\'' +
-                '}';
-    }
+    private final String DBPE_ANL_ICM_AM;
+    private final String CAR_PR;
 }

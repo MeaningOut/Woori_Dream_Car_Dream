@@ -69,7 +69,7 @@ public class CarService {
                     .carId(Long.valueOf(dto.getId()))
                     .dataBody(RequestDataBody.builder()
                             .DBPE_ANL_ICM_AM(userIncome)
-                            .CAR_PR(dto.getAvg_price())
+                            .CAR_PR(dto.getAvgPrice())
                             .build())
                     .build());
             similarityData.put(Long.valueOf(dto.getId()), dto.getSimilarity());

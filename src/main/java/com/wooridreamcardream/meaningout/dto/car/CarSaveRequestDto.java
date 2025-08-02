@@ -5,56 +5,28 @@ import com.wooridreamcardream.meaningout.domain.Category;
 import com.wooridreamcardream.meaningout.domain.Company;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-@NoArgsConstructor
+@Builder
 @Getter
 public class CarSaveRequestDto {
-    private String categoryName;
-    private String name;
-    private BigDecimal minPrice;
-    private BigDecimal maxPrice;
-    private String companyName;
-    private String origin;
-    private String carType;
-    private String engine;
-    private String charger;
-    private String emission;
-    private String fuel;
-    private String fuelEfficiency;
-    private String occupancy;
-    private String driveType;
-    private String gearShift;
-    private String imageUrl;
-
-    @Builder
-    public CarSaveRequestDto(String categoryName, String name,
-                             BigDecimal minPrice, BigDecimal maxPrice,
-                             String companyName, String origin,
-                             String carType, String engine,
-                             String charger, String emission,
-                             String fuel, String fuelEfficiency,
-                             String occupancy, String driveType,
-                             String gearShift, String imageUrl) {
-        this.categoryName = categoryName;
-        this.name = name;
-        this.minPrice = minPrice;
-        this.maxPrice = maxPrice;
-        this.companyName = companyName;
-        this.origin = origin;
-        this.carType = carType;
-        this.engine = engine;
-        this.charger = charger;
-        this.emission = emission;
-        this.fuel = fuel;
-        this.fuelEfficiency = fuelEfficiency;
-        this.occupancy = occupancy;
-        this.driveType = driveType;
-        this.gearShift = gearShift;
-        this.imageUrl = imageUrl;
-    }
+    private final String categoryName;
+    private final String name;
+    private final BigDecimal minPrice;
+    private final BigDecimal maxPrice;
+    private final String companyName;
+    private final String origin;
+    private final String carType;
+    private final String engine;
+    private final String charger;
+    private final String emission;
+    private final String fuel;
+    private final String fuelEfficiency;
+    private final String occupancy;
+    private final String driveType;
+    private final String gearShift;
+    private final String imageUrl;
 
     public Car toEntity(Category category, Company company) {
         return Car.builder()
@@ -76,6 +48,4 @@ public class CarSaveRequestDto {
                 .imageUrl(imageUrl)
                 .build();
     }
-
-
 }

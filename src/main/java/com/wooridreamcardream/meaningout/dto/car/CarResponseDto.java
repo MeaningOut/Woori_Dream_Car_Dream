@@ -9,22 +9,22 @@ import java.math.BigDecimal;
 
 @Getter
 public class CarResponseDto {
-    private Long id;
-    private Category category;
-    private String name;
-    private BigDecimal minPrice;
-    private BigDecimal maxPrice;
-    private Company company;
-    private String charger;
-    private String carType;
-    private String engine;
-    private String emission;
-    private String fuel;
-    private String fuelEfficiency;
-    private String occupancy;
-    private String driveType;
-    private String gearShift;
-    private String imageUrl;
+    private final Long id;
+    private final Category category;
+    private final String name;
+    private final BigDecimal minPrice;
+    private final BigDecimal maxPrice;
+    private final Company company;
+    private final String charger;
+    private final String carType;
+    private final String engine;
+    private final String emission;
+    private final String fuel;
+    private final String fuelEfficiency;
+    private final String occupancy;
+    private final String driveType;
+    private final String gearShift;
+    private final String imageUrl;
 
     public CarResponseDto(Car entity) {
         this.id = entity.getId();

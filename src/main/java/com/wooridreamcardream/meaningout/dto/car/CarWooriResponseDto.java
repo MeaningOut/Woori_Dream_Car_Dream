@@ -3,28 +3,30 @@ package com.wooridreamcardream.meaningout.dto.car;
 import com.wooridreamcardream.meaningout.domain.Category;
 import com.wooridreamcardream.meaningout.domain.Company;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
 @Getter
+@ToString
 public class CarWooriResponseDto {
-    private Long id;
-    private Category category;
-    private String name;
-    private BigDecimal minPrice;
-    private BigDecimal maxPrice;
-    private Company company;
-    private String carType;
-    private String engine;
-    private String emission;
-    private String charger;
-    private String fuel;
-    private String fuelEfficiency;
-    private String occupancy;
-    private String driveType;
-    private String gearShift;
-    private String imageUrl;
-    private BigDecimal loanLimit;
+    private final Long id;
+    private final Category category;
+    private final String name;
+    private final BigDecimal minPrice;
+    private final BigDecimal maxPrice;
+    private final Company company;
+    private final String carType;
+    private final String engine;
+    private final String emission;
+    private final String charger;
+    private final String fuel;
+    private final String fuelEfficiency;
+    private final String occupancy;
+    private final String driveType;
+    private final String gearShift;
+    private final String imageUrl;
+    private final BigDecimal loanLimit;
 
     public CarWooriResponseDto(CarResponseDto entity, BigDecimal loanLimit) {
         this.id = entity.getId();
@@ -44,28 +46,5 @@ public class CarWooriResponseDto {
         this.gearShift = entity.getGearShift();
         this.imageUrl = entity.getImageUrl();
         this.loanLimit = loanLimit;
-    }
-
-    @Override
-    public String toString() {
-        return "CarWooriResponseDto{" +
-                "id=" + id +
-                ", category=" + category +
-                ", name='" + name + '\'' +
-                ", minPrice=" + minPrice +
-                ", maxPrice=" + maxPrice +
-                ", company='" + company + '\'' +
-                ", carType='" + carType + '\'' +
-                ", engine='" + engine + '\'' +
-                ", charger='" + charger + '\'' +
-                ", emission='" + emission + '\'' +
-                ", fuel='" + fuel + '\'' +
-                ", fuelEfficiency='" + fuelEfficiency + '\'' +
-                ", occupancy='" + occupancy + '\'' +
-                ", driveType='" + driveType + '\'' +
-                ", gearShift='" + gearShift + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", loanLimit='" + loanLimit + '\'' +
-                '}';
     }
 }

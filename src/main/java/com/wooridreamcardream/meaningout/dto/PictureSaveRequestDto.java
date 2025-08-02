@@ -4,18 +4,11 @@ import com.wooridreamcardream.meaningout.domain.Category;
 import com.wooridreamcardream.meaningout.domain.Picture;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Getter
-public class PictureSaveRequestDto {
-    private String categoryName;
-    private String imageUrl;
-
+public record PictureSaveRequestDto(String categoryName, String imageUrl) {
     @Builder
-    public PictureSaveRequestDto(String categoryName, String imageUrl) {
-        this.categoryName = categoryName;
-        this.imageUrl = imageUrl;
+    public PictureSaveRequestDto {
     }
 
     public Picture toEntity(Category category) {

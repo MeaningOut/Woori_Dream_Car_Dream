@@ -26,10 +26,10 @@ public class PictureService {
 
     @Transactional
     public Long save(PictureSaveRequestDto pictureSaveRequestDto) {
-        Category category = categoryRepository.findByName(pictureSaveRequestDto.getCategoryName())
-                .orElseGet(() -> categoryRepository.save(new CategorySaveRequestDto(pictureSaveRequestDto.getCategoryName()).toEntity()));
+        Category category = categoryRepository.findByName(pictureSaveRequestDto.categoryName())
+                .orElseGet(() -> categoryRepository.save(new CategorySaveRequestDto(pictureSaveRequestDto.categoryName()).toEntity()));
 
-        Picture picture = pictureRepository.findByCategoryIdAndImageUrl(category.getId(), pictureSaveRequestDto.getImageUrl())
+        Picture picture = pictureRepository.findByCategoryIdAndImageUrl(category.getId(), pictureSaveRequestDto.imageUrl())
                 .orElseGet(() -> pictureRepository.save(pictureSaveRequestDto.toEntity(category)));
         return picture.getId();
     }

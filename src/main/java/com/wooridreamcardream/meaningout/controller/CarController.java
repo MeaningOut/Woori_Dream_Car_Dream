@@ -5,14 +5,12 @@ import com.wooridreamcardream.meaningout.dto.car.CarResponseDto;
 import com.wooridreamcardream.meaningout.dto.car.CarWooriResponseDto;
 import com.wooridreamcardream.meaningout.dto.PictureResponseDto;
 import com.wooridreamcardream.meaningout.service.CarService;
-import com.wooridreamcardream.meaningout.dto.car.FlaskRequestDto;
 import com.wooridreamcardream.meaningout.service.PictureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -34,22 +32,13 @@ public class CarController {
         return "car";
     }
 
-    /**
-     *
-     * 자동차의 세부 정보를 볼 수 있다.
-     * 자동차 id를 이용해서 자동차의 정보를 가지고 온다.
-     *
-     * @param id 자동차 id
-     * @param model
-     * @return
-     */
     @GetMapping("/car/{id}/picture")
     public String getCarDetails(@PathVariable Long id, Model model) {
         CarResponseDto dto = carService.findById(id);
-        List<PictureResponseDto> dtos = pictureService.findByCategoryId(dto.getCategory().getId());
+        List<PictureResponseDto> pictures = pictureService.findByCategoryId(dto.getCategory().getId());
 
         model.addAttribute("car", dto);
-        model.addAttribute("pictures", dtos);
+        model.addAttribute("pictures", pictures);
 
         return "details";
     }

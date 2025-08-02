@@ -3,9 +3,7 @@ package com.wooridreamcardream.meaningout.dto;
 import com.wooridreamcardream.meaningout.domain.Category;
 import com.wooridreamcardream.meaningout.domain.Picture;
 import lombok.Builder;
-import lombok.Getter;
 
-@Getter
 public record PictureSaveRequestDto(String categoryName, String imageUrl) {
     @Builder
     public PictureSaveRequestDto {
